@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Law Club</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --light-blue: #4d94ff;
+            --dark-blue: #004499;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-gray: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-gray);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+
+        .blog-date {
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-card h3 {
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-card p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+            color: var(--white);
+            border-color: var(--light-blue);
+        }
+
+        .executives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .executive-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .executive-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--light-blue);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .executive-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .executive-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .executive-position {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .resources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .resource-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .resource-item h3 {
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-category {
+            display: inline-block;
+            background: var(--light-blue);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chatbot-container {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .chatbot-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--light-gray);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+        }
+
+        .message.bot {
+            background: var(--primary-blue);
+            color: var(--white);
+            margin-right: 20%;
+        }
+
+        .message.user {
+            background: var(--white);
+            margin-left: 20%;
+            border: 1px solid var(--primary-blue);
+        }
+
+        .chatbot-input {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary-blue);
+            background: var(--white);
+            color: var(--primary-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        footer {
+            background: var(--dark-blue);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .blog-grid, .executives-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Tech Law Club</div>
+            <ul class="nav-links">
+                <li><a onclick="showSection('home')">Home</a></li>
+                <li><a onclick="showSection('blog')">Blog</a></li>
+                <li><a onclick="showSection('resources')">Resources</a></li>
+                <li><a onclick="showSection('chatbot')">Chatbot</a></li>
+                <li><a onclick="showSection('executives')">Executives</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Welcome to Tech Law Club</h1>
+        <p>Your comprehensive resource for Information Technology Law, past questions, and legal insights in the digital age</p>
+    </div>
+
+    <!-- Home Section -->
+    <div id="home" class="section active">
+        <div class="container">
+            <h2>About Tech Law Club</h2>
+            <p style="font-size: 1.1rem; margin: 2rem 0;">Tech Law Club is your premier destination for understanding the intersection of technology and law. We provide resources, insights, and community support for students and professionals navigating the complex world of information technology law.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📚 Resources</h3>
+                    <p>Access comprehensive IT law materials and past questions</p>
+                </div>
+                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">💬 AI Chatbot</h3>
+                    <p>Get instant answers to your tech law questions</p>
+                </div>
+                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📰 Blog</h3>
+                    <p>Stay updated with the latest in technology law</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Section -->
+    <div id="blog" class="section">
+        <div class="container">
+            <h2>Tech Law Blog</h2>
+            <div class="filter-section">
+                <button class="filter-btn active" onclick="filterBlog('all')">All Posts</button>
+                <button class="filter-btn" onclick="filterBlog('IT Law')">IT Law</button>
+                <button class="filter-btn" onclick="filterBlog('Privacy')">Privacy</button>
+                <button class="filter-btn" onclick="filterBlog('Cybersecurity')">Cybersecurity</button>
+            </div>
+            <div id="blogGrid" class="blog-grid"></div>
+        </div>
+    </div>
+
+    <!-- Resources Section -->
+    <div id="resources" class="section">
+        <div class="container">
+            <h2>Tech Law Resources</h2>
+            <div class="filter-section">
+                <button class="filter-btn active" onclick="filterResources('all')">All Resources</button>
+                <button class="filter-btn" onclick="filterResources('Past Questions')">Past Questions</button>
+                <button class="filter-btn" onclick="filterResources('IT Law Aspects')">IT Law Aspects</button>
+                <button class="filter-btn" onclick="filterResources('Study Materials')">Study Materials</button>
+            </div>
+            <div id="resourcesList" class="resources-list"></div>
+        </div>
+    </div>
+
+    <!-- Chatbot Section -->
+    <div id="chatbot" class="section">
+        <div class="container">
+            <h2>Tech Law Assistant</h2>
+            <div class="chatbot-container">
+                <div class="chatbot-messages" id="chatMessages">
+                    <div class="message bot">
+                        Hello! I'm your Tech Law Assistant. Ask me anything about Information Technology Law, cybersecurity regulations, data privacy, or any tech law topic!
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" id="chatInput" placeholder="Ask about tech law..." onkeypress="handleChatEnter(event)">
+                    <button class="btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Executives Section -->
+    <div id="executives" class="section">
+        <div class="container">
+            <h2>Meet the Executives</h2>
+            <div id="executivesGrid" class="executives-grid"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tech Law Club. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Data storage
+        let blogPosts = [
+            {
+                id: 1,
+                title: "Understanding Data Protection Laws in 2025",
+                category: "Privacy",
+                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation...",
+                date: "2025-10-20"
+            },
+            {
+                id: 2,
+                title: "Cybersecurity Compliance for Businesses",
+                category: "Cybersecurity",
+                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements...",
+                date: "2025-10-18"
+            },
+            {
+                id: 3,
+                title: "AI and Intellectual Property Rights",
+                category: "IT Law",
+                content: "As AI technology advances, questions about IP rights become more complex. This post examines the legal landscape...",
+                date: "2025-10-15"
+            }
+        ];
+
+        let resources = [
+            {
+                id: 1,
+                title: "Information Technology Law Past Questions 2024",
+                category: "Past Questions",
+                description: "Comprehensive collection of IT law exam questions from 2024"
+            },
+            {
+                id: 2,
+                title: "Introduction to Cybersecurity Law",
+                category: "IT Law Aspects",
+                description: "Fundamental concepts and principles of cybersecurity legislation"
+            },
+            {
+                id: 3,
+                title: "Data Privacy Study Guide",
+                category: "Study Materials",
+                description: "Essential reading material for understanding data privacy regulations"
+            }
+        ];
+
+        let executives = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                position: "President",
+                image: ""
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                position: "Vice President",
+                image: ""
+            },
+            {
+                id: 3,
+                name: "Emily Rodriguez",
+                position: "Secretary",
+                image: ""
+            }
+        ];
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            if (sectionId === 'blog') renderBlog();
+            if (sectionId === 'resources') renderResources();
+            if (sectionId === 'executives') renderExecutives();
+        }
+
+        // Blog functions
+        function renderBlog(filter = 'all') {
+            const grid = document.getElementById('blogGrid');
+            const filtered = filter === 'all' ? blogPosts : blogPosts.filter(p => p.category === filter);
+            
+            grid.innerHTML = filtered.map(post => `
+                <div class="blog-card">
+                    <div class="blog-card-content">
+                        <div class="blog-date">${post.date}</div>
+                        <h3>${post.title}</h3>
+                        <p>${post.content.substring(0, 150)}...</p>
+                        <button class="btn btn-secondary">Read More</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBlog(category) {
+            document.querySelectorAll('#blog .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderBlog(category);
+        }
+
+        // Resources functions
+        function renderResources(filter = 'all') {
+            const list = document.getElementById('resourcesList');
+            const filtered = filter === 'all' ? resources : resources.filter(r => r.category === filter);
+            
+            list.innerHTML = filtered.map(resource => `
+                <div class="resource-item">
+                    <span class="resource-category">${resource.category}</span>
+                    <h3>${resource.title}</h3>
+                    <p>${resource.description}</p>
+                    <button class="btn btn-secondary">Download</button>
+                </div>
+            `).join('');
+        }
+
+        function filterResources(category) {
+            document.querySelectorAll('#resources .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderResources(category);
+        }
+
+        // Executives functions
+        function renderExecutives() {
+            const grid = document.getElementById('executivesGrid');
+            grid.innerHTML = executives.map(exec => `
+                <div class="executive-card">
+                    <div class="executive-img">
+                        ${exec.image ? `<img src="${exec.image}" alt="${exec.name}">` : exec.name.charAt(0)}
+                    </div>
+                    <div class="executive-name">${exec.name}</div>
+                    <div class="executive-position">${exec.position}</div>
+                </div>
+            `).join('');
+        }
+
+        // Chatbot functions
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            messagesDiv.innerHTML += `<div class="message user">${message}</div>`;
+            input.value = '';
+
+            setTimeout(() => {
+                const response = getChatbotResponse(message);
+                messagesDiv.innerHTML += `<div class="message bot">${response}</div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 500);
+        }
+
+        function handleChatEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function getChatbotResponse(message) {
+            const msg = message.toLowerCase();
+            if (msg.includes('data protection') || msg.includes('privacy')) {
+                return "Data protection laws regulate how personal information is collected, used, and stored. Key regulations include GDPR, CCPA, and local data protection acts. Would you like to know more about a specific regulation?";
+            } else if (msg.includes('cybersecurity')) {
+                return "Cybersecurity law encompasses regulations about protecting digital systems and data. This includes incident reporting requirements, security standards, and liability frameworks. What aspect interests you?";
+            } else if (msg.includes('intellectual property') || msg.includes('ip')) {
+                return "Intellectual Property in tech law covers patents, copyrights, trademarks, and trade secrets related to technology. This is especially relevant for software, AI, and digital content.";
+            } else if (msg.includes('past question')) {
+                return "You can find past questions in our Resources section! We have collections organized by year and topic to help with your studies.";
+            } else {
+                return "That's an interesting question! Tech law is a rapidly evolving field. I recommend checking our blog and resources for detailed information. Is there a specific area of tech law you'd like to explore?";
+            }
+        }
+
+        // Initialize
+        renderBlog();
+        renderResources();
+        renderExecutives();
+    </script>
+</body>
+</html>
