@@ -24,16 +24,56 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-gray);
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            background: rgba(0, 68, 153, 0.95);
+            backdrop-filter: blur(10px);
             color: var(--white);
             padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.25);
         }
 
         nav {
@@ -46,8 +86,13 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
+            background: linear-gradient(135deg, #fff, #4d94ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 3s ease-in-out infinite;
         }
 
         .nav-links {
@@ -59,36 +104,101 @@
         .nav-links a {
             color: var(--white);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
             cursor: pointer;
+            position: relative;
+            padding: 0.5rem 0;
         }
 
-        .nav-links a:hover {
-            color: var(--light-blue);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--light-blue);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .hero {
-            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            background: linear-gradient(135deg, #0066cc 0%, #004499 50%, #002266 100%);
             color: var(--white);
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--white);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.4);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem;
         }
 
         .section {
@@ -97,102 +207,206 @@
 
         .section.active {
             display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,102,204,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
 
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
             margin-top: 2rem;
         }
 
         .blog-card {
             background: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .blog-card:hover::before {
+            transform: scaleX(1);
         }
 
         .blog-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,102,204,0.15);
         }
 
         .blog-card-content {
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
         .blog-date {
             color: var(--primary-blue);
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .blog-card h3 {
             color: var(--dark-blue);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+            transition: color 0.3s;
         }
 
-        .blog-card p {
-            color: var(--text-gray);
-            margin-bottom: 1rem;
+        .blog-card:hover h3 {
+            color: var(--primary-blue);
         }
 
         .btn {
             background: var(--primary-blue);
             color: var(--white);
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            font-weight: 600;
         }
 
         .btn:hover {
             background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
         }
 
         .btn-secondary {
-            background: var(--white);
+            background: transparent;
             color: var(--primary-blue);
             border: 2px solid var(--primary-blue);
         }
 
         .btn-secondary:hover {
-            background: var(--light-blue);
+            background: var(--primary-blue);
             color: var(--white);
-            border-color: var(--light-blue);
         }
 
         .executives-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
             margin-top: 2rem;
         }
 
         .executive-card {
             background: var(--white);
-            border-radius: 8px;
-            padding: 1.5rem;
+            border-radius: 20px;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .executive-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(77, 148, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .executive-card:hover::before {
+            left: 100%;
+        }
+
+        .executive-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,102,204,0.2);
         }
 
         .executive-img {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            background: var(--light-blue);
-            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,102,204,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .executive-card:hover .executive-img {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .executive-img img {
@@ -203,7 +417,7 @@
         }
 
         .executive-name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: var(--dark-blue);
             margin-bottom: 0.5rem;
@@ -212,73 +426,87 @@
         .executive-position {
             color: var(--primary-blue);
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .resources-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .resource-item {
             background: var(--white);
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--primary-blue);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary-blue);
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(0,102,204,0.15);
         }
 
         .resource-item h3 {
             color: var(--dark-blue);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
         }
 
         .resource-category {
             display: inline-block;
-            background: var(--light-blue);
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             color: var(--white);
-            padding: 0.25rem 0.75rem;
+            padding: 0.4rem 1rem;
             border-radius: 20px;
             font-size: 0.85rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
         }
 
         .chatbot-container {
             background: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 2rem;
-            max-width: 800px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            max-width: 900px;
             margin: 2rem auto;
         }
 
         .chatbot-messages {
-            height: 400px;
+            height: 450px;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: var(--light-gray);
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom, #f9f9f9, #ffffff);
         }
 
         .message {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 5px;
+            margin-bottom: 1.2rem;
+            padding: 1rem 1.3rem;
+            border-radius: 15px;
+            animation: fadeInUp 0.4s ease-out;
         }
 
         .message.bot {
-            background: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             color: var(--white);
-            margin-right: 20%;
+            margin-right: 15%;
+            box-shadow: 0 4px 15px rgba(0,102,204,0.3);
         }
 
         .message.user {
             background: var(--white);
-            margin-left: 20%;
-            border: 1px solid var(--primary-blue);
+            margin-left: 15%;
+            border: 2px solid var(--primary-blue);
+            color: var(--text-gray);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         .chatbot-input {
@@ -288,39 +516,96 @@
 
         .chatbot-input input {
             flex: 1;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .filter-section {
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--primary-blue);
-            background: var(--white);
-            color: var(--primary-blue);
-            border-radius: 5px;
-            cursor: pointer;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1rem;
             transition: all 0.3s;
         }
 
+        .chatbot-input input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            border: 2px solid var(--primary-blue);
+            background: var(--white);
+            color: var(--primary-blue);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
         .filter-btn.active {
-            background: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             color: var(--white);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,102,204,0.3);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
         }
 
         footer {
-            background: var(--dark-blue);
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: var(--white);
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.1) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite;
+        }
+
+        footer p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 1rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            border-radius: 2px;
         }
 
         @media (max-width: 768px) {
@@ -330,19 +615,45 @@
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
-            .blog-grid, .executives-grid {
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .blog-grid, .executives-grid, .feature-grid {
                 grid-template-columns: 1fr;
             }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 10px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-blue);
         }
     </style>
 </head>
 <body>
-    <header>
+    <header id="header">
         <nav>
-            <div class="logo">Tech Law Club</div>
+            <div class="logo">⚖️ Tech Law Club</div>
             <ul class="nav-links">
                 <li><a onclick="showSection('home')">Home</a></li>
                 <li><a onclick="showSection('blog')">Blog</a></li>
@@ -354,28 +665,34 @@
     </header>
 
     <div class="hero">
-        <h1>Welcome to Tech Law Club</h1>
-        <p>Your comprehensive resource for Information Technology Law, past questions, and legal insights in the digital age</p>
+        <div class="hero-content">
+            <h1>Welcome to Tech Law Club</h1>
+            <p>Your comprehensive resource for Information Technology Law, past questions, and legal insights in the digital age</p>
+            <a href="#" class="cta-button" onclick="event.preventDefault(); showSection('resources')">Explore Resources</a>
+        </div>
     </div>
 
     <!-- Home Section -->
     <div id="home" class="section active">
         <div class="container">
-            <h2>About Tech Law Club</h2>
-            <p style="font-size: 1.1rem; margin: 2rem 0;">Tech Law Club is your premier destination for understanding the intersection of technology and law. We provide resources, insights, and community support for students and professionals navigating the complex world of information technology law.</p>
+            <h2 class="section-title">About Tech Law Club</h2>
+            <p style="font-size: 1.15rem; margin: 2rem auto; text-align: center; max-width: 800px;">Tech Law Club is your premier destination for understanding the intersection of technology and law. We provide resources, insights, and community support for students and professionals navigating the complex world of information technology law.</p>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
-                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
-                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📚 Resources</h3>
-                    <p>Access comprehensive IT law materials and past questions</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📚</span>
+                    <h3>Comprehensive Resources</h3>
+                    <p>Access extensive IT law materials, past exam questions, and study guides curated by legal experts in technology law.</p>
                 </div>
-                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
-                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">💬 AI Chatbot</h3>
-                    <p>Get instant answers to your tech law questions</p>
+                <div class="feature-card">
+                    <span class="feature-icon">💬</span>
+                    <h3>AI-Powered Chatbot</h3>
+                    <p>Get instant answers to your tech law questions from our intelligent assistant trained on legal frameworks and regulations.</p>
                 </div>
-                <div style="text-align: center; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
-                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📰 Blog</h3>
-                    <p>Stay updated with the latest in technology law</p>
+                <div class="feature-card">
+                    <span class="feature-icon">📰</span>
+                    <h3>Latest Updates</h3>
+                    <p>Stay informed with cutting-edge articles on cybersecurity, data privacy, intellectual property, and emerging tech regulations.</p>
                 </div>
             </div>
         </div>
@@ -384,7 +701,7 @@
     <!-- Blog Section -->
     <div id="blog" class="section">
         <div class="container">
-            <h2>Tech Law Blog</h2>
+            <h2 class="section-title">Tech Law Blog</h2>
             <div class="filter-section">
                 <button class="filter-btn active" onclick="filterBlog('all')">All Posts</button>
                 <button class="filter-btn" onclick="filterBlog('IT Law')">IT Law</button>
@@ -398,7 +715,7 @@
     <!-- Resources Section -->
     <div id="resources" class="section">
         <div class="container">
-            <h2>Tech Law Resources</h2>
+            <h2 class="section-title">Tech Law Resources</h2>
             <div class="filter-section">
                 <button class="filter-btn active" onclick="filterResources('all')">All Resources</button>
                 <button class="filter-btn" onclick="filterResources('Past Questions')">Past Questions</button>
@@ -412,7 +729,7 @@
     <!-- Chatbot Section -->
     <div id="chatbot" class="section">
         <div class="container">
-            <h2>Tech Law Assistant</h2>
+            <h2 class="section-title">Tech Law Assistant</h2>
             <div class="chatbot-container">
                 <div class="chatbot-messages" id="chatMessages">
                     <div class="message bot">
@@ -430,37 +747,48 @@
     <!-- Executives Section -->
     <div id="executives" class="section">
         <div class="container">
-            <h2>Meet the Executives</h2>
+            <h2 class="section-title">Meet the Executives</h2>
             <div id="executivesGrid" class="executives-grid"></div>
         </div>
     </div>
 
     <footer>
         <p>&copy; 2025 Tech Law Club. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
     <script>
+        // Scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
         // Data storage
         let blogPosts = [
             {
                 id: 1,
                 title: "Understanding Data Protection Laws in 2025",
                 category: "Privacy",
-                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation...",
+                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation and how organizations can ensure compliance with evolving regulations...",
                 date: "2025-10-20"
             },
             {
                 id: 2,
                 title: "Cybersecurity Compliance for Businesses",
                 category: "Cybersecurity",
-                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements...",
+                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements, best practices, and legal implications of data breaches...",
                 date: "2025-10-18"
             },
             {
                 id: 3,
                 title: "AI and Intellectual Property Rights",
                 category: "IT Law",
-                content: "As AI technology advances, questions about IP rights become more complex. This post examines the legal landscape...",
+                content: "As AI technology advances, questions about IP rights become more complex. This post examines the legal landscape surrounding AI-generated content and ownership disputes...",
                 date: "2025-10-15"
             }
         ];
@@ -470,19 +798,25 @@
                 id: 1,
                 title: "Information Technology Law Past Questions 2024",
                 category: "Past Questions",
-                description: "Comprehensive collection of IT law exam questions from 2024"
+                description: "Comprehensive collection of IT law exam questions from 2024 with detailed answers and explanations"
             },
             {
                 id: 2,
                 title: "Introduction to Cybersecurity Law",
                 category: "IT Law Aspects",
-                description: "Fundamental concepts and principles of cybersecurity legislation"
+                description: "Fundamental concepts and principles of cybersecurity legislation including GDPR, CCPA, and local regulations"
             },
             {
                 id: 3,
                 title: "Data Privacy Study Guide",
                 category: "Study Materials",
-                description: "Essential reading material for understanding data privacy regulations"
+                description: "Essential reading material for understanding data privacy regulations and their practical applications"
+            },
+            {
+                id: 4,
+                title: "Blockchain and Smart Contracts Legal Framework",
+                category: "IT Law Aspects",
+                description: "Explore the legal considerations surrounding blockchain technology and smart contract enforcement"
             }
         ];
 
@@ -504,6 +838,12 @@
                 name: "Emily Rodriguez",
                 position: "Secretary",
                 image: ""
+            },
+            {
+                id: 4,
+                name: "David Okonkwo",
+                position: "Treasurer",
+                image: ""
             }
         ];
 
@@ -513,6 +853,8 @@
                 section.classList.remove('active');
             });
             document.getElementById(sectionId).classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
             if (sectionId === 'blog') renderBlog();
             if (sectionId === 'resources') renderResources();
@@ -602,15 +944,17 @@
         function getChatbotResponse(message) {
             const msg = message.toLowerCase();
             if (msg.includes('data protection') || msg.includes('privacy')) {
-                return "Data protection laws regulate how personal information is collected, used, and stored. Key regulations include GDPR, CCPA, and local data protection acts. Would you like to know more about a specific regulation?";
+                return "Data protection laws regulate how personal information is collected, used, and stored. Key regulations include GDPR, CCPA, and local data protection acts. These laws require organizations to implement strict security measures, obtain proper consent, and provide individuals with rights over their data. Would you like to know more about a specific regulation?";
             } else if (msg.includes('cybersecurity')) {
-                return "Cybersecurity law encompasses regulations about protecting digital systems and data. This includes incident reporting requirements, security standards, and liability frameworks. What aspect interests you?";
+                return "Cybersecurity law encompasses regulations about protecting digital systems and data. This includes incident reporting requirements, security standards, and liability frameworks. Organizations must comply with regulations like the NIS Directive, CISA, and sector-specific requirements. What aspect of cybersecurity law interests you?";
             } else if (msg.includes('intellectual property') || msg.includes('ip')) {
-                return "Intellectual Property in tech law covers patents, copyrights, trademarks, and trade secrets related to technology. This is especially relevant for software, AI, and digital content.";
+                return "Intellectual Property in tech law covers patents, copyrights, trademarks, and trade secrets related to technology. This is especially relevant for software, AI, algorithms, and digital content. Key issues include software licensing, open source considerations, and protecting innovations.";
             } else if (msg.includes('past question')) {
-                return "You can find past questions in our Resources section! We have collections organized by year and topic to help with your studies.";
+                return "You can find past questions in our Resources section! We have collections organized by year and topic to help with your studies. These include comprehensive answers and explanations to help you understand the legal principles.";
+            } else if (msg.includes('blockchain') || msg.includes('crypto')) {
+                return "Blockchain and cryptocurrency law is an evolving field. Key considerations include regulatory compliance, smart contract enforceability, token classification, and cross-border transactions. Many jurisdictions are still developing their legal frameworks for these technologies.";
             } else {
-                return "That's an interesting question! Tech law is a rapidly evolving field. I recommend checking our blog and resources for detailed information. Is there a specific area of tech law you'd like to explore?";
+                return "That's an interesting question! Tech law is a rapidly evolving field covering areas like data protection, cybersecurity, intellectual property, e-commerce, and emerging technologies. I recommend checking our blog and resources for detailed information. Is there a specific area of tech law you'd like to explore?";
             }
         }
 
