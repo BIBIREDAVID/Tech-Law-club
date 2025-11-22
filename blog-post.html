@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Blog Post - Tech Law Club</title>
+    <meta name="description" content="Read the latest insights on technology law">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --light-blue: #4d94ff;
+            --dark-blue: #004499;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-gray: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header {
+            background: rgba(0, 68, 153, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fff, #4d94ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--light-blue);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--light-blue);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .post-header {
+            margin-bottom: 2rem;
+        }
+
+        .post-category {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .post-title {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-content {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 3rem;
+        }
+
+        .post-content h2 {
+            color: var(--dark-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .post-content h3 {
+            color: var(--primary-blue);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .post-content ul, .post-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid var(--primary-blue);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #555;
+            font-style: italic;
+        }
+
+        .back-to-blog {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary-blue);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .back-to-blog:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
+        }
+
+        .related-posts {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-gray);
+        }
+
+        .related-posts h2 {
+            color: var(--dark-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .related-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .related-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,102,204,0.15);
+        }
+
+        .related-card h3 {
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-card a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 70px);
+                background: rgba(0, 68, 153, 0.98);
+                flex-direction: column;
+                padding: 2rem 0;
+                gap: 0;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 1rem 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .post-title {
+                font-size: 2rem;
+            }
+
+            .post-content {
+                padding: 1.5rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚖️ Tech Law Club</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="chatbot.html">Chatbot</a></li>
+                <li><a href="executives.html">Executives</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> / <a href="blog.html">Blog</a> / <span id="breadcrumbTitle">Article</span>
+        </div>
+
+        <div class="post-header">
+            <span class="post-category" id="postCategory">IT Law</span>
+            <h1 class="post-title" id="postTitle">Loading...</h1>
+            <div class="post-meta">
+                <span>📅 <span id="postDate">Date</span></span>
+                <span>👤 Tech Law Club</span>
+                <span>⏱️ 5 min read</span>
+            </div>
+        </div>
+
+        <div class="post-content" id="postContent">
+            <p>Loading article...</p>
+        </div>
+
+        <a href="blog.html" class="back-to-blog">← Back to All Posts</a>
+
+        <div class="related-posts">
+            <h2>Related Articles</h2>
+            <div class="related-grid" id="relatedPosts"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tech Law Club. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
+    </footer>
+
+    <script>
+        const blogPosts = {
+            1: {
+                title: "Understanding Data Protection Laws in 2025",
+                category: "Privacy",
+                date: "2025-10-20",
+                content: `
+                    <p>Data protection has become increasingly important in our digital age. As organizations collect, process, and store vast amounts of personal data, the legal frameworks governing these activities have evolved significantly.</p>
+
+                    <h2>The Evolution of Data Protection</h2>
+                    <p>Since the introduction of GDPR in 2018, the landscape of data protection has transformed dramatically. Organizations worldwide have had to reassess their data handling practices and implement robust compliance measures.</p>
+
+                    <h3>Key Principles of Data Protection</h3>
+                    <ul>
+                        <li><strong>Lawfulness, Fairness, and Transparency:</strong> Data must be processed legally, fairly, and transparently.</li>
+                        <li><strong>Purpose Limitation:</strong> Data should only be collected for specified, explicit, and legitimate purposes.</li>
+                        <li><strong>Data Minimization:</strong> Only necessary data should be collected and processed.</li>
+                        <li><strong>Accuracy:</strong> Personal data must be accurate and kept up to date.</li>
+                        <li><strong>Storage Limitation:</strong> Data should not be kept longer than necessary.</li>
+                        <li><strong>Integrity and Confidentiality:</strong> Appropriate security measures must be implemented.</li>
+                    </ul>
+
+                    <h2>Global Data Protection Frameworks</h2>
+                    <p>Different regions have developed their own approaches to data protection:</p>
+
+                    <h3>European Union - GDPR</h3>
+                    <p>The General Data Protection Regulation remains the gold standard for data protection globally. It provides individuals with strong rights including access, rectification, erasure, and data portability.</p>
+
+                    <h3>United States - Sectoral Approach</h3>
+                    <p>The US takes a more fragmented approach with sector-specific laws like HIPAA for healthcare and GLBA for financial services. California's CCPA represents a more comprehensive state-level framework.</p>
+
+                    <h3>Emerging Markets</h3>
+                    <p>Countries like Brazil (LGPD), India (proposed DPDP Act), and many others are implementing comprehensive data protection laws modeled after GDPR.</p>
+
+                    <h2>Compliance Challenges</h2>
+                    <p>Organizations face numerous challenges in achieving and maintaining compliance:</p>
+                    <ul>
+                        <li>Cross-border data transfers and jurisdictional complexities</li>
+                        <li>Balancing innovation with privacy requirements</li>
+                        <li>Implementing privacy by design and default</li>
+                        <li>Managing consent and individual rights requests</li>
+                        <li>Conducting regular data protection impact assessments</li>
+                    </ul>
+
+                    <blockquote>"Privacy is not something that I'm merely entitled to, it's an absolute prerequisite." - Marlon Brando</blockquote>
+
+                    <h2>Best Practices for 2025</h2>
+                    <p>To navigate the evolving data protection landscape, organizations should:</p>
+                    <ol>
+                        <li>Appoint a qualified Data Protection Officer</li>
+                        <li>Maintain comprehensive records of processing activities</li>
+                        <li>Implement robust security measures including encryption</li>
+                        <li>Develop clear privacy policies and notices</li>
+                        <li>Train staff regularly on data protection requirements</li>
+                        <li>Establish incident response procedures</li>
+                    </ol>
+
+                    <h2>The Future of Data Protection</h2>
+                    <p>Looking ahead, we can expect continued evolution in data protection law, particularly around emerging technologies like AI, IoT, and biometric data. Organizations must stay informed and agile to adapt to these changes.</p>
+
+                    <p>The intersection of data protection with other legal areas such as cybersecurity, intellectual property, and consumer protection will also become increasingly important.</p>
+                `
+            },
+            2: {
+                title: "Cybersecurity Compliance for Businesses",
+                category: "Cybersecurity",
+                date: "2025-10-18",
+                content: `
+                    <p>In today's interconnected digital landscape, cybersecurity compliance has evolved from a technical consideration to a critical business imperative. Organizations face an increasingly complex web of regulations, standards, and best practices.</p>
+
+                    <h2>The Regulatory Landscape</h2>
+                    <p>Cybersecurity regulations vary significantly across jurisdictions and sectors, creating challenges for multinational organizations.</p>
+
+                    <h3>Key Regulatory Frameworks</h3>
+                    <ul>
+                        <li><strong>NIS Directive (EU):</strong> Network and Information Security requirements for critical infrastructure</li>
+                        <li><strong>CISA (US):</strong> Cybersecurity Information Sharing Act promoting threat intelligence sharing</li>
+                        <li><strong>SEC Cybersecurity Rules:</strong> Disclosure requirements for public companies</li>
+                        <li><strong>Sector-Specific Requirements:</strong> HIPAA (healthcare), PCI DSS (payment cards), FISMA (federal systems)</li>
+                    </ul>
+
+                    <h2>Core Compliance Requirements</h2>
+                    <p>Most cybersecurity frameworks share common foundational requirements:</p>
+
+                    <h3>Risk Assessment and Management</h3>
+                    <p>Organizations must conduct regular risk assessments to identify vulnerabilities and implement appropriate controls. This includes threat modeling, vulnerability scanning, and penetration testing.</p>
+
+                    <h3>Security Controls Implementation</h3>
+                    <p>Technical, administrative, and physical controls must be implemented based on risk assessment findings. This includes access controls, encryption, network segmentation, and security monitoring.</p>
+
+                    <h3>Incident Response</h3>
+                    <p>Documented incident response plans are essential, including detection procedures, containment strategies, communication protocols, and recovery processes.</p>
+
+                    <h2>Compliance Frameworks and Standards</h2>
+                    <p>Organizations often adopt recognized frameworks to structure their compliance efforts:</p>
+
+                    <h3>NIST Cybersecurity Framework</h3>
+                    <p>The NIST CSF provides a flexible, risk-based approach organized around five functions: Identify, Protect, Detect, Respond, and Recover.</p>
+
+                    <h3>ISO 27001</h3>
+                    <p>This international standard provides a systematic approach to managing sensitive information through an Information Security Management System (ISMS).</p>
+
+                    <h2>Breach Notification Requirements</h2>
+                    <p>Many jurisdictions now require prompt notification of security breaches:</p>
+                    <ul>
+                        <li>GDPR: 72-hour notification requirement</li>
+                        <li>Various US state laws with different timelines</li>
+                        <li>Sector-specific requirements (HIPAA, state insurance regulations)</li>
+                    </ul>
+
+                    <h2>Vendor and Third-Party Risk Management</h2>
+                    <p>Organizations must extend cybersecurity oversight to their supply chain. This includes due diligence, contractual requirements, and ongoing monitoring of third-party security practices.</p>
+
+                    <h2>Challenges in Achieving Compliance</h2>
+                    <p>Common obstacles include:</p>
+                    <ul>
+                        <li>Rapidly evolving threat landscape</li>
+                        <li>Limited cybersecurity talent and resources</li>
+                        <li>Complex legacy systems and technical debt</li>
+                        <li>Balancing security with business operations</li>
+                        <li>Keeping pace with regulatory changes</li>
+                    </ul>
+
+                    <blockquote>"Cybersecurity is not just a technology issue; it's a business risk that requires board-level attention." - Anonymous CISO</blockquote>
+
+                    <h2>Building a Compliance Program</h2>
+                    <p>Effective cybersecurity compliance requires:</p>
+                    <ol>
+                        <li>Executive commitment and governance</li>
+                        <li>Clear policies and procedures</li>
+                        <li>Regular employee training and awareness</li>
+                        <li>Continuous monitoring and testing</li>
+                        <li>Documentation and evidence collection</li>
+                        <li>Regular audits and assessments</li>
+                    </ol>
+
+                    <p>By treating cybersecurity compliance as an ongoing process rather than a one-time project, organizations can better protect their assets and maintain stakeholder trust.</p>
+                `
+            },
+            3: {
+                title: "AI and Intellectual Property Rights",
+                category: "IT Law",
+                date: "2025-10-15",
+                content: `
+                    <p>As artificial intelligence technology rapidly advances, the legal framework surrounding intellectual property rights faces unprecedented challenges. Questions about ownership, authorship, and protection of AI-generated content are reshaping traditional IP law.</p>
+
+                    <h2>The AI IP Challenge</h2>
+                    <p>Traditional IP law was designed for human creators and inventors. AI introduces fundamental questions about whether non-human entities can create protectable works or inventions.</p>
+
+                    <h3>Copyright and AI-Generated Content</h3>
+                    <p>Recent legal cases have grappled with whether AI-generated content can be copyrighted. Key issues include:</p>
+                    <ul>
+                        <li>Requirement of human authorship in most jurisdictions</li>
+                        <li>Determining who owns AI-generated works: developer, user, or AI system?</li>
+                        <li>Protection for training data and models themselves</li>
+                        <li>Fair use implications of training AI on copyrighted works</li>
+                    </ul>
+
+                    <h2>Patent Law and AI Inventions</h2>
+                    <p>Patent offices worldwide are addressing whether AI systems can be listed as inventors. The debate centers on:</p>
+
+                    <h3>Inventorship Requirements</h3>
+                    <p>Can an AI system be an inventor? Most patent offices currently require human inventors, but this is being challenged as AI systems become more autonomous in their creative processes.</p>
+
+                    <h3>Patenting AI Technologies</h3>
+                    <p>AI algorithms and models themselves raise patentability questions regarding:</p>
+                    <ul>
+                        <li>Abstract idea exceptions</li>
+                        <li>Technical effect requirements</li>
+                        <li>Disclosure and enablement standards</li>
+                    </ul>
+
+                    <h2>Trade Secrets in AI Development</h2>
+                    <p>Many AI developers rely on trade secret protection for their algorithms and training methodologies. This approach offers advantages:</p>
+                    <ul>
+                        <li>No disclosure requirements</li>
+                        <li>Indefinite protection duration</li>
+                        <li>Protection for information that might not qualify for patents</li>
+                    </ul>
+
+                    <p>However, challenges exist in maintaining secrecy while deploying AI systems and complying with AI transparency requirements.</p>
+
+                    <h2>Trademark Issues in AI</h2>
+                    <p>AI-generated branding and content creation tools raise questions about trademark ownership and infringement. Concerns include:</p>
+                    <ul>
+                        <li>Liability when AI generates infringing marks</li>
+                        <li>Protection for AI-generated brand assets</li>
+                        <li>Use of trademarked content in training data</li>
+                    </ul>
+
+                    <h2>Contractual Approaches</h2>
+                    <p>In the absence of clear legal frameworks, many organizations rely on contracts to allocate IP rights:</p>
+
+                    <h3>Development Agreements</h3>
+                    <p>Clear provisions should address ownership of:</p>
+                    <ul>
+                        <li>AI models and algorithms</li>
+                        <li>Training data</li>
+                        <li>AI-generated outputs</li>
+                        <li>Improvements and derivatives</li>
+                    </ul>
+
+                    <h3>Licensing Considerations</h3>
+                    <p>AI licensing agreements must carefully define scope of use, data rights, and output ownership.</p>
+
+                    <blockquote>"The question is not whether AI can create, but who should own what it creates." - Leading IP Scholar</blockquote>
+
+                    <h2>International Perspectives</h2>
+                    <p>Different jurisdictions are taking varied approaches:</p>
+
+                    <h3>United States</h3>
+                    <p>Copyright Office maintains that human authorship is required. USPTO requires human inventors but recognizes AI-assisted inventions.</p>
+
+                    <h3>European Union</h3>
+                    <p>Similar human-centric approach, though the proposed AI Act may influence IP frameworks.</p>
+
+                    <h3>Emerging Frameworks</h3>
+                    <p>Some countries like the UK have considered sui generis protection for AI-generated works.</p>
+
+                    <h2>Practical Recommendations</h2>
+                    <p>Organizations working with AI should:</p>
+                    <ol>
+                        <li>Document human contributions to AI-assisted creations</li>
+                        <li>Implement clear IP assignment agreements</li>
+                        <li>Consider hybrid protection strategies (patents, trade secrets, copyright)</li>
+                        <li>Monitor evolving legal standards and case law</li>
+                        <li>Conduct IP audits specific to AI systems</li>
+                        <li>Address data rights and training data provenance</li>
+                    </ol>
+
+                    <h2>The Path Forward</h2>
+                    <p>As AI technology continues to evolve, legal frameworks will need to adapt. Potential developments include:</p>
+                    <ul>
+                        <li>New categories of IP protection for AI-generated works</li>
+                        <li>Modified inventorship and authorship standards</li>
+                        <li>Standardized licensing frameworks for AI systems</li>
+                        <li>International harmonization efforts</li>
+                    </ul>
+
+                    <p>Staying informed about these developments is crucial for anyone working at the intersection of AI and intellectual property.</p>
+                `
+            }
+        };
+
+        const relatedPostsData = [
+            { id: 4, title: "GDPR Compliance Guide for Startups", category: "Privacy" },
+            { id: 5, title: "Blockchain Regulation: Current State and Future", category: "IT Law" },
+            { id: 6, title: "Zero Trust Security: Legal Implications", category: "Cybersecurity" }
+        ];
+
+        function getPostIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || '1';
+        }
+
+        function loadPost() {
+            const postId = getPostIdFromURL();
+            const post = blogPosts[postId];
+
+            if (post) {
+                document.getElementById('pageTitle').textContent = post.title + ' - Tech Law Club';
+                document.getElementById('breadcrumbTitle').textContent = post.title;
+                document.getElementById('postCategory').textContent = post.category;
+                document.getElementById('postTitle').textContent = post.title;
+                document.getElementById('postDate').textContent = post.date;
+                document.getElementById('postContent').innerHTML = post.content;
+            } else {
+                document.getElementById('postContent').innerHTML = '<p>Post not found. <a href="blog.html">Return to blog</a></p>';
+            }
+
+            loadRelatedPosts();
+        }
+
+        function loadRelatedPosts() {
+            const related = document.getElementById('relatedPosts');
+            related.innerHTML = relatedPostsData.map(post => `
+                <div class="related-card">
+                    <h3>${post.title}</h3>
+                    <p style="color: var(--primary-blue); font-size: 0.9rem; margin: 0.5rem 0;">${post.category}</p>
+                    <a href="blog-post.html?id=${post.id}">Read More →</a>
+                </div>
+            `).join('');
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav');
+            
+            if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        loadPost();
+    </script>
+</body>
+</html>

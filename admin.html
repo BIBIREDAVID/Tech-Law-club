@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Law Club - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --light-blue: #4d94ff;
+            --dark-blue: #004499;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-gray: #333333;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-gray);
+            background: var(--light-gray);
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+        }
+
+        .login-box {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .login-box p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .admin-container {
+            display: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .admin-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .section-header h2 {
+            color: var(--dark-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table th {
+            background: var(--light-gray);
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background: var(--light-gray);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+            }
+
+            .data-table {
+                font-size: 0.9rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1>Admin Login</h1>
+            <p>Tech Law Club Admin Panel</p>
+            <div id="loginAlert" class="alert"></div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Login</button>
+            </form>
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: #999;">Default: admin / admin123</p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-container">
+        <header>
+            <nav>
+                <div class="logo">⚖️ Tech Law Club - Admin</div>
+                <div class="user-info">
+                    <span id="adminUsername">Admin</span>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Dashboard Overview</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalBlogs">0</div>
+                        <div>Total Blog Posts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalResources">0</div>
+                        <div>Total Resources</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalExecutives">0</div>
+                        <div>Total Executives</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('blog')">Manage Blog</button>
+                <button class="tab" onclick="showTab('resources')">Manage Resources</button>
+                <button class="tab" onclick="showTab('executives')">Manage Executives</button>
+            </div>
+
+            <!-- Blog Management -->
+            <div id="blogTab" class="tab-content active">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Add New Blog Post</h2>
+                    </div>
+                    <div id="blogAlert" class="alert"></div>
+                    <form onsubmit="addBlogPost(event)">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" id="blogTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="blogCategory" required>
+                                <option value="IT Law">IT Law</option>
+                                <option value="Privacy">Privacy</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Content *</label>
+                            <textarea id="blogContent" required placeholder="Write your blog post content here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Publish Post</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Existing Blog Posts</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resources Management -->
+            <div id="resourcesTab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Add New Resource</h2>
+                    </div>
+                    <div id="resourceAlert" class="alert"></div>
+                    <form onsubmit="addResource(event)">
+                        <div class="form-group">
+                            <label>Resource Title *</label>
+                            <input type="text" id="resourceTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="resourceCategory" required>
+                                <option value="Past Questions">Past Questions</option>
+                                <option value="IT Law Aspects">IT Law Aspects</option>
+                                <option value="Study Materials">Study Materials</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description *</label>
+                            <textarea id="resourceDescription" required placeholder="Describe the resource..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Link (optional)</label>
+                            <input type="url" id="resourceLink" placeholder="https://example.com/resource">
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Resource</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Existing Resources</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resourceTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Executives Management -->
+            <div id="executivesTab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Add New Executive</h2>
+                    </div>
+                    <div id="executiveAlert" class="alert"></div>
+                    <form onsubmit="addExecutive(event)">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" id="execName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Position *</label>
+                            <input type="text" id="execPosition" required placeholder="e.g., President, Vice President, Secretary">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio *</label>
+                            <textarea id="execBio" required placeholder="Brief bio about the executive..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Image URL (optional)</label>
+                            <input type="url" id="execImage" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Executive</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Current Executives</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="executiveTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data storage (in production, this would be a database)
+        let blogPosts = [
+            {
+                id: 1,
+                title: "Understanding Data Protection Laws in 2025",
+                category: "Privacy",
+                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation...",
+                date: "2025-10-20"
+            },
+            {
+                id: 2,
+                title: "Cybersecurity Compliance for Businesses",
+                category: "Cybersecurity",
+                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements...",
+                date: "2025-10-18"
+            }
+        ];
+
+        let resources = [
+            {
+                id: 1,
+                title: "Information Technology Law Past Questions 2024",
+                category: "Past Questions",
+                description: "Comprehensive collection of IT law exam questions from 2024"
+            },
+            {
+                id: 2,
+                title: "Introduction to Cybersecurity Law",
+                category: "IT Law Aspects",
+                description: "Fundamental concepts and principles of cybersecurity legislation"
+            }
+        ];
+
+        let executives = [
+            {
+                id: 1,
+                name: "Dami Ogehenemudia",
+                position: "President",
+                bio: "Leading the club's strategic vision and initiatives.",
+                image: ""
+            },
+            {
+                id: 2,
+                name: "Masturah",
+                position: "Vice President",
+                bio: "Supporting club operations and member engagement.",
+                image: ""
+            }
+        ];
+
+        // Login functionality
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple authentication (in production, use proper backend authentication)
+            if (username === 'admin' && password === 'admin123') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                document.getElementById('adminUsername').textContent = username;
+                updateDashboard();
+            } else {
+                showAlert('loginAlert', 'Invalid username or password', 'danger');
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Tab management
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            if (tabName === 'blog') renderBlogTable();
+            if (tabName === 'resources') renderResourceTable();
+            if (tabName === 'executives') renderExecutiveTable();
+        }
+
+        // Alert functionality
+        function showAlert(elementId, message, type) {
+            const alert = document.getElementById(elementId);
+            alert.className = `alert alert-${type} show`;
+            alert.textContent = message;
+            setTimeout(() => alert.classList.remove('show'), 5000);
+        }
+
+        // Dashboard updates
+        function updateDashboard() {
+            document.getElementById('totalBlogs').textContent = blogPosts.length;
+            document.getElementById('totalResources').textContent = resources.length;
+            document.getElementById('totalExecutives').textContent = executives.length;
+            renderBlogTable();
+        }
+
+        // Blog Management
+        function addBlogPost(e) {
+            e.preventDefault();
+            const newPost = {
+                id: blogPosts.length + 1,
+                title: document.getElementById('blogTitle').value,
+                category: document.getElementById('blogCategory').value,
+                content: document.getElementById('blogContent').value,
+                date: new Date().toISOString().split('T')[0]
+            };
+            blogPosts.unshift(newPost);
+            e.target.reset();
+            showAlert('blogAlert', 'Blog post added successfully!', 'success');
+            updateDashboard();
+        }
+
+        function renderBlogTable() {
+            const tbody = document.getElementById('blogTableBody');
+            tbody.innerHTML = blogPosts.map(post => `
+                <tr>
+                    <td>${post.date}</td>
+                    <td>${post.title}</td>
+                    <td>${post.category}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteBlog(${post.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteBlog(id) {
+            if (confirm('Are you sure you want to delete this blog post?')) {
+                blogPosts = blogPosts.filter(post => post.id !== id);
+                renderBlogTable();
+                updateDashboard();
+            }
+        }
+
+        // Resource Management
+        function addResource(e) {
+            e.preventDefault();
+            const newResource = {
+                id: resources.length + 1,
+                title: document.getElementById('resourceTitle').value,
+                category: document.getElementById('resourceCategory').value,
+                description: document.getElementById('resourceDescription').value,
+                link: document.getElementById('resourceLink').value
+            };
+            resources.push(newResource);
+            e.target.reset();
+            showAlert('resourceAlert', 'Resource added successfully!', 'success');
+            updateDashboard();
+        }
+
+        function renderResourceTable() {
+            const tbody = document.getElementById('resourceTableBody');
+            tbody.innerHTML = resources.map(resource => `
+                <tr>
+                    <td>${resource.title}</td>
+                    <td>${resource.category}</td>
+                    <td>${resource.description.substring(0, 60)}...</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteResource(${resource.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteResource(id) {
+            if (confirm('Are you sure you want to delete this resource?')) {
+                resources = resources.filter(resource => resource.id !== id);
+                renderResourceTable();
+                updateDashboard();
+            }
+        }
+
+        // Executive Management
+        function addExecutive(e) {
+            e.preventDefault();
+            const newExec = {
+                id: executives.length + 1,
+                name: document.getElementById('execName').value,
+                position: document.getElementById('execPosition').value,
+                bio: document.getElementById('execBio').value,
+                image: document.getElementById('execImage').value
+            };
+            executives.push(newExec);
+            e.target.reset();
+            showAlert('executiveAlert', 'Executive added successfully!', 'success');
+            updateDashboard();
+        }
+
+        function renderExecutiveTable() {
+            const tbody = document.getElementById('executiveTableBody');
+            tbody.innerHTML = executives.map(exec => `
+                <tr>
+                    <td>${exec.name}</td>
+                    <td>${exec.position}</td>
+                    <td>${exec.image ? 'Yes' : 'No'}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteExecutive(${exec.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteExecutive(id) {
+            if (confirm('Are you sure you want to delete this executive?')) {
+                executives = executives.filter(exec => exec.id !== id);
+                renderExecutiveTable();
+                updateDashboard();
+            }
+        }
+    </script>
+</body>
+</html>

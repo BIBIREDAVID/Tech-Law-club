@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Tech Law Club</title>
+    <meta name="description" content="Stay updated with the latest in technology law, cybersecurity, data privacy, and more">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --light-blue: #4d94ff;
+            --dark-blue: #004499;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-gray: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-gray);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header {
+            background: rgba(0, 68, 153, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fff, #4d94ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--light-blue);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--light-blue);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #0066cc, #004499);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .filter-section {
+            margin-bottom: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            border: 2px solid var(--primary-blue);
+            background: var(--white);
+            color: var(--primary-blue);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,102,204,0.3);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .blog-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,102,204,0.15);
+        }
+
+        .blog-card-content {
+            padding: 2rem;
+        }
+
+        .blog-date {
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .blog-card h3 {
+            color: var(--dark-blue);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+            transition: color 0.3s;
+        }
+
+        .blog-card:hover h3 {
+            color: var(--primary-blue);
+        }
+
+        .blog-category {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 70px);
+                background: rgba(0, 68, 153, 0.98);
+                flex-direction: column;
+                padding: 2rem 0;
+                gap: 0;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 1rem 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚖️ Tech Law Club</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="chatbot.html">Chatbot</a></li>
+                <li><a href="executives.html">Executives</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <h1>Tech Law Blog</h1>
+        <p>Latest insights on technology law and digital regulations</p>
+    </div>
+
+    <div class="container">
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterBlog('all')">All Posts</button>
+            <button class="filter-btn" onclick="filterBlog('IT Law')">IT Law</button>
+            <button class="filter-btn" onclick="filterBlog('Privacy')">Privacy</button>
+            <button class="filter-btn" onclick="filterBlog('Cybersecurity')">Cybersecurity</button>
+        </div>
+
+        <div id="blogGrid" class="blog-grid"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tech Law Club. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
+    </footer>
+
+    <script>
+        // Blog posts data
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Understanding Data Protection Laws in 2025",
+                category: "Privacy",
+                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation and how organizations can ensure compliance with evolving regulations...",
+                date: "2025-10-20",
+                slug: "understanding-data-protection-2025"
+            },
+            {
+                id: 2,
+                title: "Cybersecurity Compliance for Businesses",
+                category: "Cybersecurity",
+                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements, best practices, and legal implications of data breaches...",
+                date: "2025-10-18",
+                slug: "cybersecurity-compliance-businesses"
+            },
+            {
+                id: 3,
+                title: "AI and Intellectual Property Rights",
+                category: "IT Law",
+                content: "As AI technology advances, questions about IP rights become more complex. This post examines the legal landscape surrounding AI-generated content and ownership disputes...",
+                date: "2025-10-15",
+                slug: "ai-intellectual-property-rights"
+            },
+            {
+                id: 4,
+                title: "GDPR Compliance Guide for Startups",
+                category: "Privacy",
+                content: "A comprehensive guide for tech startups navigating GDPR compliance requirements in the European market...",
+                date: "2025-10-12",
+                slug: "gdpr-compliance-startups"
+            },
+            {
+                id: 5,
+                title: "Blockchain Regulation: Current State and Future",
+                category: "IT Law",
+                content: "Exploring how different jurisdictions are approaching blockchain regulation and what it means for businesses...",
+                date: "2025-10-10",
+                slug: "blockchain-regulation-future"
+            },
+            {
+                id: 6,
+                title: "Zero Trust Security: Legal Implications",
+                category: "Cybersecurity",
+                content: "Understanding the legal framework around implementing zero trust security architectures in organizations...",
+                date: "2025-10-08",
+                slug: "zero-trust-security-legal"
+            }
+        ];
+
+        function renderBlog(filter = 'all') {
+            const grid = document.getElementById('blogGrid');
+            const filtered = filter === 'all' ? blogPosts : blogPosts.filter(p => p.category === filter);
+            
+            grid.innerHTML = filtered.map(post => `
+                <div class="blog-card">
+                    <div class="blog-card-content">
+                        <span class="blog-category">${post.category}</span>
+                        <div class="blog-date">${post.date}</div>
+                        <h3>${post.title}</h3>
+                        <p>${post.content.substring(0, 150)}...</p>
+                        <a href="blog-post.html?id=${post.id}" class="btn">Read More</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBlog(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderBlog(category);
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav');
+            
+            if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        renderBlog();
+    </script>
+</body>
+</html>
