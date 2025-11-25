@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     <title>Tech Law Club - Admin Panel</title>
     <style>
         * {
@@ -294,6 +296,70 @@
             border: 1px solid #f5c6cb;
         }
 
+        .avatar-grid,
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .avatar-option,
+        .stock-option {
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .avatar-option:hover,
+        .stock-option:hover {
+            border-color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .avatar-option.selected,
+        .stock-option.selected {
+            border-color: var(--success);
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        .avatar-option img,
+        .stock-option img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .stock-option span {
+            display: block;
+            padding: 0.5rem;
+            background: var(--light-gray);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 2px solid var(--light-gray);
+        }
+
+        .file-info {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .file-info strong {
+            color: var(--dark-blue);
+        }
+
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -395,6 +461,54 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Featured Image Option</label>
+                            <select id="blogImageOption" onchange="toggleBlogImageInput()">
+                                <option value="none">No Image</option>
+                                <option value="url">Image URL</option>
+                                <option value="upload">Upload Image</option>
+                                <option value="stock">Stock Images</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="blogImageUrlGroup" style="display: none;">
+                            <label>Image URL</label>
+                            <input type="url" id="blogImageUrl" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group" id="blogImageUploadGroup" style="display: none;">
+                            <label>Upload Image</label>
+                            <input type="file" id="blogImageUpload" accept="image/*" onchange="previewBlogImage(event)">
+                            <div id="blogImagePreview" style="margin-top: 1rem;"></div>
+                        </div>
+                        <div class="form-group" id="blogStockGroup" style="display: none;">
+                            <label>Choose Stock Image</label>
+                            <div class="stock-grid">
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400" alt="Tech 1">
+                                    <span>Technology</span>
+                                </div>
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400" alt="Data">
+                                    <span>Data</span>
+                                </div>
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400" alt="Security">
+                                    <span>Security</span>
+                                </div>
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400" alt="Legal">
+                                    <span>Legal</span>
+                                </div>
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400" alt="AI">
+                                    <span>AI/ML</span>
+                                </div>
+                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800')">
+                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400" alt="Analytics">
+                                    <span>Analytics</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="selectedBlogStock">
+                        </div>
+                        <div class="form-group">
                             <label>Content *</label>
                             <textarea id="blogContent" required placeholder="Write your blog post content here..."></textarea>
                         </div>
@@ -445,8 +559,33 @@
                             <textarea id="resourceDescription" required placeholder="Describe the resource..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Link (optional)</label>
-                            <input type="url" id="resourceLink" placeholder="https://example.com/resource">
+                            <label>File/Link Option *</label>
+                            <select id="resourceFileOption" onchange="toggleResourceFileInput()">
+                                <option value="url">External URL</option>
+                                <option value="upload">Upload File (PDF)</option>
+                                <option value="gdrive">Google Drive Link</option>
+                                <option value="dropbox">Dropbox Link</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="resourceUrlGroup">
+                            <label>Resource URL</label>
+                            <input type="url" id="resourceLink" placeholder="https://example.com/resource.pdf">
+                        </div>
+                        <div class="form-group" id="resourceUploadGroup" style="display: none;">
+                            <label>Upload PDF File</label>
+                            <input type="file" id="resourceFileUpload" accept=".pdf,.doc,.docx,.ppt,.pptx" onchange="previewResourceFile(event)">
+                            <div id="resourceFilePreview" style="margin-top: 1rem;"></div>
+                            <small style="color: #666;">Supported: PDF, DOC, DOCX, PPT, PPTX (Max 10MB)</small>
+                        </div>
+                        <div class="form-group" id="resourceGdriveGroup" style="display: none;">
+                            <label>Google Drive Share Link</label>
+                            <input type="url" id="resourceGdriveLink" placeholder="https://drive.google.com/file/d/...">
+                            <small style="color: #666;">Make sure link is set to "Anyone with the link can view"</small>
+                        </div>
+                        <div class="form-group" id="resourceDropboxGroup" style="display: none;">
+                            <label>Dropbox Share Link</label>
+                            <input type="url" id="resourceDropboxLink" placeholder="https://www.dropbox.com/s/...">
+                            <small style="color: #666;">Use the direct download link</small>
                         </div>
                         <button type="submit" class="btn btn-success">Add Resource</button>
                     </form>
@@ -491,8 +630,46 @@
                             <textarea id="execBio" required placeholder="Brief bio about the executive..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Image URL (optional)</label>
+                            <label>Image Option *</label>
+                            <select id="execImageOption" onchange="toggleExecImageInput()">
+                                <option value="none">No Image (Use Initial)</option>
+                                <option value="url">Image URL</option>
+                                <option value="upload">Upload Image</option>
+                                <option value="avatar">Choose Avatar</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="execImageUrlGroup" style="display: none;">
+                            <label>Image URL</label>
                             <input type="url" id="execImage" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="form-group" id="execImageUploadGroup" style="display: none;">
+                            <label>Upload Image</label>
+                            <input type="file" id="execImageUpload" accept="image/*" onchange="previewExecImage(event)">
+                            <div id="execImagePreview" style="margin-top: 1rem;"></div>
+                        </div>
+                        <div class="form-group" id="execAvatarGroup" style="display: none;">
+                            <label>Choose Avatar</label>
+                            <div class="avatar-grid">
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=1')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" alt="Avatar 1">
+                                </div>
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=2')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=2" alt="Avatar 2">
+                                </div>
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=3')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=3" alt="Avatar 3">
+                                </div>
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=4')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=4" alt="Avatar 4">
+                                </div>
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=5')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=5" alt="Avatar 5">
+                                </div>
+                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=6')">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=6" alt="Avatar 6">
+                                </div>
+                            </div>
+                            <input type="hidden" id="selectedExecAvatar">
                         </div>
                         <button type="submit" class="btn btn-success">Add Executive</button>
                     </form>
@@ -701,17 +878,63 @@
         // Executive Management
         function addExecutive(e) {
             e.preventDefault();
+            
+            let imageUrl = '';
+            const imageOption = document.getElementById('execImageOption').value;
+            
+            if (imageOption === 'url') {
+                imageUrl = document.getElementById('execImage').value;
+            } else if (imageOption === 'upload') {
+                const file = document.getElementById('execImageUpload').files[0];
+                if (file) {
+                    // In production, upload to server and get URL
+                    imageUrl = URL.createObjectURL(file);
+                }
+            } else if (imageOption === 'avatar') {
+                imageUrl = document.getElementById('selectedExecAvatar').value;
+            }
+            
             const newExec = {
                 id: executives.length + 1,
                 name: document.getElementById('execName').value,
                 position: document.getElementById('execPosition').value,
                 bio: document.getElementById('execBio').value,
-                image: document.getElementById('execImage').value
+                image: imageUrl
             };
             executives.push(newExec);
             e.target.reset();
+            document.getElementById('execImageOption').value = 'none';
+            toggleExecImageInput();
             showAlert('executiveAlert', 'Executive added successfully!', 'success');
             updateDashboard();
+        }
+
+        function toggleExecImageInput() {
+            const option = document.getElementById('execImageOption').value;
+            document.getElementById('execImageUrlGroup').style.display = option === 'url' ? 'block' : 'none';
+            document.getElementById('execImageUploadGroup').style.display = option === 'upload' ? 'block' : 'none';
+            document.getElementById('execAvatarGroup').style.display = option === 'avatar' ? 'block' : 'none';
+        }
+
+        function previewExecImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('execImagePreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function selectAvatar(type, url) {
+            document.getElementById('selectedExecAvatar').value = url;
+            
+            // Highlight selected avatar
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
         }
 
         function renderExecutiveTable() {

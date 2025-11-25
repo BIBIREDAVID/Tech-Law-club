@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People - Tech Law Club</title>
+    <meta name="description" content="Meet the deans, patrons, administration, and executive team of Tech Law Club">
+    <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --light-blue: #4d94ff;
+            --dark-blue: #004499;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --text-gray: #333333;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --meta-gray: #666;
+        }
+
+        /* Auto Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --white: #1a1a1a;
+                --light-gray: #2d2d2d;
+                --text-gray: #e0e0e0;
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --primary-blue: #5da3ff;
+                --dark-blue: #4d94ff;
+                --meta-gray: #b0b0b0;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-gray);
+            background: var(--bg-color);
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        header {
+            background: rgba(0, 68, 153, 0.95);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            header {
+                background: rgba(29, 29, 29, 0.95);
+            }
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #fff, #4d94ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--light-blue);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--light-blue);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #ffffff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #0066cc, #004499);
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .page-header {
+                background: linear-gradient(135deg, #1a3a5c, #0d2438);
+            }
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--dark-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            border-radius: 2px;
+        }
+
+        /* Dean Section */
+        .dean-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dean-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .dean-card {
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+        }
+
+        .dean-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,102,204,0.2);
+        }
+
+        .dean-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,102,204,0.3);
+            overflow: hidden;
+        }
+
+        .dean-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dean-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .dean-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dean-bio {
+            color: var(--meta-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Current Executives - Single Image */
+        .executives-showcase {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .executives-showcase {
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+        }
+
+        .executives-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .executives-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--light-gray);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.2);
+        }
+
+        .contact-icon {
+            font-size: 1.2rem;
+        }
+
+        .contact-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Former Administration */
+        .former-admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .admin-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .admin-card {
+                box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            }
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,102,204,0.15);
+        }
+
+        .admin-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .admin-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .admin-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-position {
+            color: var(--meta-gray);
+            font-size: 0.9rem;
+        }
+
+        .admin-year {
+            color: var(--primary-blue);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Patrons Section */
+        .patrons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .patron-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .patron-card {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            }
+        }
+
+        .patron-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 12px 35px rgba(0,102,204,0.2);
+        }
+
+        .patron-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .patron-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .patron-description {
+            color: var(--meta-gray);
+            line-height: 1.6;
+        }
+
+        /* Connect With Us Footer Section */
+        .connect-footer {
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
+            color: #ffffff;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .connect-footer {
+                background: linear-gradient(135deg, #1a1a1a, #000000);
+            }
+        }
+
+        .connect-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .connect-footer h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .connect-footer p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .social-icon i {
+            font-size: 2rem;
+            color: #ffffff;
+        }
+
+        .social-link:hover .social-icon {
+            background: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .social-link:hover .social-icon i {
+            color: var(--primary-blue);
+        }
+
+        .social-label {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .contact-info p {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            footer {
+                background: linear-gradient(135deg, #0d0d0d, #000000);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 70px);
+                background: rgba(0, 68, 153, 0.98);
+                flex-direction: column;
+                padding: 2rem 0;
+                gap: 0;
+                transition: right 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .nav-links {
+                    background: rgba(29, 29, 29, 0.98);
+                }
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 1rem 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .dean-grid,
+            .former-admin-grid,
+            .patrons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                gap: 1rem;
+            }
+
+            .executives-contacts {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">⚖️ Tech Law Club</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="chatbot.html">Chatbot</a></li>
+                <li><a href="people.html" class="active">People</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <h1>Meet Our People</h1>
+        <p>The leadership, patrons, and team behind Tech Law Club</p>
+    </div>
+
+    <div class="container">
+        <!-- Deans Section -->
+        <div class="section">
+            <h2 class="section-title">Our Deans</h2>
+            <div class="dean-grid" id="deansGrid"></div>
+        </div>
+
+        <!-- Current Executives Section -->
+        <div class="section">
+            <h2 class="section-title">Current Executive Team</h2>
+            <div class="executives-showcase">
+                <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 1rem;">
+                    Academic Session 2024/2025
+                </p>
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200" 
+                     alt="Executive Team" 
+                     class="executives-image"
+                     id="executivesImage">
+                <p style="margin-top: 1rem; font-style: italic; color: var(--meta-gray);">
+                    Our dedicated executive team working together for excellence
+                </p>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark-blue);">Contact Our Executives</h3>
+                <div class="executives-contacts">
+                    <div class="contact-item">
+                        <span class="contact-icon">👤</span>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-gray);">President</div>
+                            <a href="tel:+2348012345678" class="contact-link">+234 801 234 5678</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">👤</span>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-gray);">Vice President</div>
+                            <a href="tel:+2348098765432" class="contact-link">+234 809 876 5432</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">👤</span>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-gray);">General Secretary</div>
+                            <a href="tel:+2347011223344" class="contact-link">+234 701 122 3344</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Former Administration Section -->
+        <div class="section">
+            <h2 class="section-title">Former Administration</h2>
+            <div class="former-admin-grid" id="formerAdminGrid"></div>
+        </div>
+
+        <!-- Patrons Section -->
+        <div class="section">
+            <h2 class="section-title">Our Patrons</h2>
+            <div class="patrons-grid" id="patronsGrid"></div>
+        </div>
+    </div>
+
+    <!-- Connect With Us Footer -->
+    <div class="connect-footer">
+        <div class="connect-container">
+            <h2>Connect With Us</h2>
+            <p>Follow us on social media and stay connected with Tech Law Club</p>
+            
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-linkedin"></i>
+                    </div>
+                    <span class="social-label">LinkedIn</span>
+                </a>
+                
+                <a href="https://www.instagram.com/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-instagram"></i>
+                    </div>
+                    <span class="social-label">Instagram</span>
+                </a>
+                
+                <a href="https://twitter.com/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-twitter"></i> 
+                    </div>
+                    <span class="social-label">Twitter</span>
+                </a>
+                
+                <a href="mailto:info@techlawclub.com" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <span class="social-label">Email</span>
+                </a>
+            </div>
+
+            <div class="contact-info">
+                <h3>Get In Touch</h3>
+                <p>
+                    <i class="fa fa-map-marker" style="margin-right: 5px;"></i> Faculty of Law Building, Lagos State University<br>
+                    <i class="fa fa-envelope" style="margin-right: 5px;"></i> info@techlawclub.com<br>
+                    <i class="fa fa-phone" style="margin-right: 5px;"></i> +234 800 000 0000
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tech Law Club. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
+    </footer>
+
+    <script>
+        // Sample Data
+        const deans = [
+            {
+                id: 1,
+                name: "Prof. Adewale Johnson",
+                title: "Dean, Faculty of Law",
+                bio: "Leading legal education with over 25 years of experience in technology law and legal practice.",
+                image: ""
+            },
+            {
+                id: 2,
+                name: "Prof. Ngozi Okonkwo",
+                title: "Associate Dean (Academic)",
+                bio: "Specializing in cyber law and digital rights, championing innovation in legal education.",
+                image: ""
+            }
+        ];
+
+        const formerAdministration = [
+            {
+                id: 1,
+                name: "Chioma Adeleke",
+                position: "President",
+                year: "2023/2024",
+                image: ""
+            },
+            {
+                id: 2,
+                name: "Oluwaseun Ibrahim",
+                position: "Vice President",
+                year: "2023/2024",
+                image: ""
+            },
+            {
+                id: 3,
+                name: "Fatima Hassan",
+                position: "General Secretary",
+                year: "2023/2024",
+                image: ""
+            },
+            {
+                id: 4,
+                name: "Chukwudi Eze",
+                position: "President",
+                year: "2022/2023",
+                image: ""
+            },
+            {
+                id: 5,
+                name: "Blessing Okafor",
+                position: "Vice President",
+                year: "2022/2023",
+                image: ""
+            },
+            {
+                id: 6,
+                name: "Mohammed Bello",
+                position: "General Secretary",
+                year: "2022/2023",
+                image: ""
+            }
+        ];
+
+        const patrons = [
+            {
+                id: 1,
+                name: "Hon. Justice Amina Mohammed",
+                title: "Supreme Court Justice",
+                description: "Distinguished jurist with extensive experience in technology and intellectual property law."
+            },
+            {
+                id: 2,
+                name: "Chief Adeola Williams, SAN",
+                title: "Senior Advocate of Nigeria",
+                description: "Leading expert in cybersecurity law and digital rights, guiding the next generation of tech lawyers."
+            },
+            {
+                id: 3,
+                name: "Dr. Kenneth Ugochukwu",
+                title: "Technology Law Consultant",
+                description: "International consultant specializing in data protection and privacy regulations across Africa."
+            }
+        ];
+
+        // Render Functions
+        function renderDeans() {
+            const grid = document.getElementById('deansGrid');
+            grid.innerHTML = deans.map(dean => `
+                <div class="dean-card">
+                    <div class="dean-img">
+                        ${dean.image ? `<img src="${dean.image}" alt="${dean.name}">` : dean.name.charAt(0)}
+                    </div>
+                    <div class="dean-name">${dean.name}</div>
+                    <div class="dean-title">${dean.title}</div>
+                    <p class="dean-bio">${dean.bio}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderFormerAdmin() {
+            const grid = document.getElementById('formerAdminGrid');
+            grid.innerHTML = formerAdministration.map(admin => `
+                <div class="admin-card">
+                    <div class="admin-img">
+                        ${admin.image ? `<img src="${admin.image}" alt="${admin.name}">` : admin.name.charAt(0)}
+                    </div>
+                    <div class="admin-name">${admin.name}</div>
+                    <div class="admin-position">${admin.position}</div>
+                    <div class="admin-year">${admin.year}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderPatrons() {
+            const grid = document.getElementById('patronsGrid');
+            grid.innerHTML = patrons.map(patron => `
+                <div class="patron-card">
+                    <div class="patron-name">${patron.name}</div>
+                    <div class="patron-title">${patron.title}</div>
+                    <p class="patron-description">${patron.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // Hamburger Menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav');
+            
+            if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        renderDeans();
+        renderFormerAdmin();
+        renderPatrons();
+    </script>
+</body>
+</html>

@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Law Club - Home</title>
     <meta name="description" content="Your comprehensive resource for Information Technology Law, past questions, and legal insights in the digital age">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -20,13 +22,30 @@
             --white: #ffffff;
             --light-gray: #f5f5f5;
             --text-gray: #333333;
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+        }
+
+        /* Auto Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --white: #1a1a1a;
+                --light-gray: #2d2d2d;
+                --text-gray: #e0e0e0;
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --primary-blue: #5da3ff;
+                --dark-blue: #4d94ff;
+            }
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-gray);
+            background: var(--bg-color);
             overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
         }
 
         @keyframes fadeInUp {
@@ -53,13 +72,19 @@
         header {
             background: rgba(0, 68, 153, 0.95);
             backdrop-filter: blur(10px);
-            color: var(--white);
+            color: #ffffff;
             padding: 1rem 0;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
             transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            header {
+                background: rgba(29, 29, 29, 0.95);
+            }
         }
 
         header.scrolled {
@@ -93,7 +118,7 @@
         }
 
         .nav-links a {
-            color: var(--white);
+            color: #ffffff;
             text-decoration: none;
             transition: all 0.3s;
             position: relative;
@@ -129,7 +154,7 @@
         .hamburger span {
             width: 25px;
             height: 3px;
-            background: var(--white);
+            background: #ffffff;
             border-radius: 3px;
             transition: all 0.3s ease;
         }
@@ -148,11 +173,17 @@
 
         .hero {
             background: linear-gradient(135deg, #0066cc 0%, #004499 50%, #002266 100%);
-            color: var(--white);
+            color: #ffffff;
             text-align: center;
             padding: 6rem 2rem;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .hero {
+                background: linear-gradient(135deg, #1a3a5c 0%, #0d2438 50%, #000814 100%);
+            }
         }
 
         .hero::before {
@@ -201,7 +232,7 @@
         .cta-button {
             display: inline-block;
             padding: 1rem 2.5rem;
-            background: var(--white);
+            background: #ffffff;
             color: var(--primary-blue);
             text-decoration: none;
             border-radius: 50px;
@@ -254,13 +285,19 @@
         }
 
         .feature-card {
-            background: var(--white);
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .feature-card {
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
         }
 
         .feature-card::before {
@@ -289,6 +326,7 @@
             margin-bottom: 1rem;
             display: block;
             animation: float 3s ease-in-out infinite;
+            color: var(--primary-blue);
         }
 
         .feature-card h3 {
@@ -311,14 +349,119 @@
             transform: translateX(5px);
         }
 
-        footer {
+        /* Connect With Us Footer Section */
+        .connect-footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
-            color: var(--white);
-            text-align: center;
+            color: #ffffff;
             padding: 3rem 2rem;
             margin-top: 4rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .connect-footer {
+                background: linear-gradient(135deg, #1a1a1a, #000000);
+            }
+        }
+
+        .connect-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .connect-footer h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .connect-footer p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .social-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .social-icon i {
+            font-size: 2rem;
+            color: #ffffff;
+        }
+
+        .social-link:hover .social-icon {
+            background: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .social-link:hover .social-icon i {
+            color: var(--primary-blue);
+        }
+
+        .social-label {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .contact-info p {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue), #001a3d);
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem 0.5rem;
             position: relative;
             overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            footer {
+                background: linear-gradient(135deg, #0d0d0d, #000000);
+            }
         }
 
         footer::before {
@@ -373,6 +516,12 @@
                 transition: right 0.4s ease;
                 box-shadow: -5px 0 15px rgba(0,0,0,0.3);
                 z-index: 999;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .nav-links {
+                    background: rgba(29, 29, 29, 0.98);
+                }
             }
 
             .nav-links.active {
@@ -435,6 +584,10 @@
             .feature-card {
                 padding: 2rem;
             }
+
+            .social-links {
+                gap: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -454,49 +607,20 @@
                 font-size: 1.7rem;
             }
         }
-        /* MOBILE OVERFLOW FIX */
-html, body {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-    margin: 0;
-    padding: 0;
-}
 
-* {
-    box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-    .container,
-    .hero,
-    .page-header,
-    nav,
-    footer {
-        width: 100%;
-        max-width: 100vw;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        box-sizing: border-box;
-    }
-
-    .hero::before,
-    .hero::after {
-        width: 250px;
-        height: 250px;
-    }
-
-    h1, h2, h3 {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-}
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
     <header id="header">
         <nav>
-            <div class="logo">⚖️ Tech Law Club</div>
+            <div class="logo"><i class="fa fa-balance-scale"></i> Tech Law Club</div>
             <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
@@ -506,8 +630,8 @@ html, body {
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="resources.html">Resources</a></li>
-                <li><a href="chatbot.html">Chatbot</a></li>
-                <li><a href="executives.html">Executives</a></li>
+                <li><a href="chatbot.html">Chatbot</a></li>                
+                <li><a href="people.html">People</a></li>
             </ul>
         </nav>
     </header>
@@ -530,22 +654,69 @@ html, body {
         
         <div class="feature-grid">
             <div class="feature-card">
-                <span class="feature-icon">📚</span>
+                <span class="feature-icon"><i class="fa fa-book"></i></span>
                 <h3>Comprehensive Resources</h3>
                 <p>Access extensive IT law materials, past exam questions, and study guides curated by legal experts in technology law.</p>
                 <a href="resources.html">Browse Resources →</a>
             </div>
             <div class="feature-card">
-                <span class="feature-icon">💬</span>
+                <span class="feature-icon"><i class="fa fa-robot"></i></span>
                 <h3>AI-Powered Chatbot</h3>
                 <p>Get instant answers to your tech law questions from our intelligent assistant trained on legal frameworks and regulations.</p>
                 <a href="chatbot.html">Try Chatbot →</a>
             </div>
             <div class="feature-card">
-                <span class="feature-icon">📰</span>
+                <span class="feature-icon"><i class="fa fa-newspaper"></i></span>
                 <h3>Latest Updates</h3>
                 <p>Stay informed with cutting-edge articles on cybersecurity, data privacy, intellectual property, and emerging tech regulations.</p>
                 <a href="blog.html">Read Blog →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connect With Us Footer -->
+    <div class="connect-footer">
+        <div class="connect-container">
+            <h2>Connect With Us</h2>
+            <p>Follow us on social media and stay connected with Tech Law Club</p>
+            
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-linkedin"></i>
+                    </div>
+                    <span class="social-label">LinkedIn</span>
+                </a>
+                
+                <a href="https://www.instagram.com/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-instagram"></i>
+                    </div>
+                    <span class="social-label">Instagram</span>
+                </a>
+                
+                <a href="https://twitter.com/techlawclub" target="_blank" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-twitter"></i> 
+                    </div>
+                    <span class="social-label">Twitter</span>
+                </a>
+                
+                <a href="mailto:info@techlawclub.com" class="social-link">
+                    <div class="social-icon">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <span class="social-label">Email</span>
+                </a>
+            </div>
+
+            <div class="contact-info">
+                <h3>Get In Touch</h3>
+                <p>
+                    <i class="fa fa-map-marker" style="margin-right: 5px;"></i> Faculty of Law Building, Lagos State University<br>
+                    <i class="fa fa-envelope" style="margin-right: 5px;"></i> info@techlawclub.com<br>
+                    <i class="fa fa-phone" style="margin-right: 5px;"></i> +234 800 000 0000
+                </p>
             </div>
         </div>
     </div>
