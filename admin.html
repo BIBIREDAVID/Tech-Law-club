@@ -229,15 +229,20 @@
             display: inline-block;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: var(--dark-blue);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
 
         .btn-success {
             background: var(--success);
         }
 
-        .btn-success:hover {
+        .btn-success:hover:not(:disabled) {
             background: #218838;
         }
 
@@ -245,7 +250,7 @@
             background: var(--danger);
         }
 
-        .btn-danger:hover {
+        .btn-danger:hover:not(:disabled) {
             background: #c82333;
         }
 
@@ -253,7 +258,7 @@
             background: #6c757d;
         }
 
-        .btn-secondary:hover {
+        .btn-secondary:hover:not(:disabled) {
             background: #5a6268;
         }
 
@@ -306,6 +311,12 @@
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
 
         .avatar-grid,
@@ -372,6 +383,21 @@
             color: var(--dark-blue);
         }
 
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -399,18 +425,22 @@
             <h1>Admin Login</h1>
             <p>Tech Law Club Admin Panel</p>
             <div id="loginAlert" class="alert"></div>
-            <form onsubmit="handleLogin(event)">
+            <form id="loginForm">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="username" required autocomplete="username">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="password" required autocomplete="current-password">
+                    <input type="password" id="loginPassword" required autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">Login</button>
+                <button type="submit" class="btn" style="width: 100%;" id="loginBtn">
+                    Login
+                </button>
             </form>
-            <p style="margin-top: 1rem; font-size: 0.85rem; color: #999;">Default: admin / admin123</p>
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: #999;">
+                Use your Firebase account to login
+            </p>
         </div>
     </div>
 
@@ -421,7 +451,7 @@
                 <div class="logo">⚖️ Tech Law Club - Admin</div>
                 <div class="user-info">
                     <span id="adminUsername">Admin</span>
-                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                    <button class="btn btn-secondary" id="logoutBtn">Logout</button>
                 </div>
             </nav>
         </header>
@@ -446,9 +476,9 @@
             </div>
 
             <div class="tabs">
-                <button class="tab active" onclick="showTab('blog')">Manage Blog</button>
-                <button class="tab" onclick="showTab('resources')">Manage Resources</button>
-                <button class="tab" onclick="showTab('executives')">Manage Executives</button>
+                <button class="tab active" data-tab="blog">Manage Blog</button>
+                <button class="tab" data-tab="resources">Manage Resources</button>
+                <button class="tab" data-tab="executives">Manage Executives</button>
             </div>
 
             <!-- Blog Management -->
@@ -458,7 +488,7 @@
                         <h2>Add New Blog Post</h2>
                     </div>
                     <div id="blogAlert" class="alert"></div>
-                    <form onsubmit="addBlogPost(event)">
+                    <form id="blogForm">
                         <div class="form-group">
                             <label>Title *</label>
                             <input type="text" id="blogTitle" required>
@@ -474,7 +504,7 @@
                         </div>
                         <div class="form-group">
                             <label>Featured Image Option</label>
-                            <select id="blogImageOption" onchange="toggleBlogImageInput()">
+                            <select id="blogImageOption">
                                 <option value="none">No Image</option>
                                 <option value="url">Image URL</option>
                                 <option value="upload">Upload Image</option>
@@ -487,33 +517,33 @@
                         </div>
                         <div class="form-group" id="blogImageUploadGroup" style="display: none;">
                             <label>Upload Image</label>
-                            <input type="file" id="blogImageUpload" accept="image/*" onchange="previewBlogImage(event)">
+                            <input type="file" id="blogImageUpload" accept="image/*">
                             <div id="blogImagePreview" style="margin-top: 1rem;"></div>
                         </div>
                         <div class="form-group" id="blogStockGroup" style="display: none;">
                             <label>Choose Stock Image</label>
                             <div class="stock-grid">
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800">
                                     <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400" alt="Tech 1">
                                     <span>Technology</span>
                                 </div>
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800">
                                     <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400" alt="Data">
                                     <span>Data</span>
                                 </div>
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800">
                                     <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400" alt="Security">
                                     <span>Security</span>
                                 </div>
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800">
                                     <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400" alt="Legal">
                                     <span>Legal</span>
                                 </div>
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800">
                                     <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400" alt="AI">
                                     <span>AI/ML</span>
                                 </div>
-                                <div class="stock-option" onclick="selectStockImage('blog', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800')">
+                                <div class="stock-option" data-stock-url="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800">
                                     <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400" alt="Analytics">
                                     <span>Analytics</span>
                                 </div>
@@ -541,7 +571,11 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="blogTableBody"></tbody>
+                        <tbody id="blogTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Loading...</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -553,7 +587,7 @@
                         <h2>Add New Resource</h2>
                     </div>
                     <div id="resourceAlert" class="alert"></div>
-                    <form onsubmit="addResource(event)">
+                    <form id="resourceForm">
                         <div class="form-group">
                             <label>Resource Title *</label>
                             <input type="text" id="resourceTitle" required>
@@ -572,7 +606,7 @@
                         </div>
                         <div class="form-group">
                             <label>File/Link Option *</label>
-                            <select id="resourceFileOption" onchange="toggleResourceFileInput()">
+                            <select id="resourceFileOption">
                                 <option value="url">External URL</option>
                                 <option value="upload">Upload File (PDF)</option>
                                 <option value="gdrive">Google Drive Link</option>
@@ -585,7 +619,7 @@
                         </div>
                         <div class="form-group" id="resourceUploadGroup" style="display: none;">
                             <label>Upload PDF File</label>
-                            <input type="file" id="resourceFileUpload" accept=".pdf,.doc,.docx,.ppt,.pptx" onchange="previewResourceFile(event)">
+                            <input type="file" id="resourceFileUpload" accept=".pdf,.doc,.docx,.ppt,.pptx">
                             <div id="resourceFilePreview" style="margin-top: 1rem;"></div>
                             <small style="color: #666;">Supported: PDF, DOC, DOCX, PPT, PPTX (Max 10MB)</small>
                         </div>
@@ -616,7 +650,11 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="resourceTableBody"></tbody>
+                        <tbody id="resourceTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Loading...</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -628,7 +666,7 @@
                         <h2>Add New Executive</h2>
                     </div>
                     <div id="executiveAlert" class="alert"></div>
-                    <form onsubmit="addExecutive(event)">
+                    <form id="executiveForm">
                         <div class="form-group">
                             <label>Name *</label>
                             <input type="text" id="execName" required>
@@ -643,7 +681,7 @@
                         </div>
                         <div class="form-group">
                             <label>Image Option *</label>
-                            <select id="execImageOption" onchange="toggleExecImageInput()">
+                            <select id="execImageOption">
                                 <option value="none">No Image (Use Initial)</option>
                                 <option value="url">Image URL</option>
                                 <option value="upload">Upload Image</option>
@@ -656,28 +694,28 @@
                         </div>
                         <div class="form-group" id="execImageUploadGroup" style="display: none;">
                             <label>Upload Image</label>
-                            <input type="file" id="execImageUpload" accept="image/*" onchange="previewExecImage(event)">
+                            <input type="file" id="execImageUpload" accept="image/*">
                             <div id="execImagePreview" style="margin-top: 1rem;"></div>
                         </div>
                         <div class="form-group" id="execAvatarGroup" style="display: none;">
                             <label>Choose Avatar</label>
                             <div class="avatar-grid">
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=1')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=1">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" alt="Avatar 1">
                                 </div>
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=2')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=2">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=2" alt="Avatar 2">
                                 </div>
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=3')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=3">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=3" alt="Avatar 3">
                                 </div>
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=4')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=4">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=4" alt="Avatar 4">
                                 </div>
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=5')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=5">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=5" alt="Avatar 5">
                                 </div>
-                                <div class="avatar-option" onclick="selectAvatar('exec', 'https://api.dicebear.com/7.x/avataaars/svg?seed=6')">
+                                <div class="avatar-option" data-avatar-url="https://api.dicebear.com/7.x/avataaars/svg?seed=6">
                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=6" alt="Avatar 6">
                                 </div>
                             </div>
@@ -700,100 +738,106 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="executiveTableBody"></tbody>
+                        <tbody id="executiveTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Loading...</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Sample data storage (in production, this would be a database)
-        let blogPosts = [
-            {
-                id: 1,
-                title: "Understanding Data Protection Laws in 2025",
-                category: "Privacy",
-                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation...",
-                date: "2025-10-20"
-            },
-            {
-                id: 2,
-                title: "Cybersecurity Compliance for Businesses",
-                category: "Cybersecurity",
-                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements...",
-                date: "2025-10-18"
-            }
-        ];
+    <!-- Firebase and App Scripts -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
 
-        let resources = [
-            {
-                id: 1,
-                title: "Information Technology Law Past Questions 2024",
-                category: "Past Questions",
-                description: "Comprehensive collection of IT law exam questions from 2024"
-            },
-            {
-                id: 2,
-                title: "Introduction to Cybersecurity Law",
-                category: "IT Law Aspects",
-                description: "Fundamental concepts and principles of cybersecurity legislation"
-            }
-        ];
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+            authDomain: "techlawclub-93ed6.firebaseapp.com",
+            projectId: "techlawclub-93ed6",
+            storageBucket: "techlawclub-93ed6.firebasestorage.app",
+            messagingSenderId: "309868998174",
+            appId: "1:309868998174:web:8cab8a65209c56598e480f",
+            measurementId: "G-6G0DG1WTFP"
+        };
 
-        let executives = [
-            {
-                id: 1,
-                name: "Dami Ogehenemudia",
-                position: "President",
-                bio: "Leading the club's strategic vision and initiatives.",
-                image: ""
-            },
-            {
-                id: 2,
-                name: "Masturah",
-                position: "Vice President",
-                bio: "Supporting club operations and member engagement.",
-                image: ""
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        console.log('Firebase initialized successfully');
+
+        // UI Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminUsername = document.getElementById('adminUsername');
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                loginScreen.style.display = 'none';
+                adminDashboard.style.display = 'block';
+                adminUsername.textContent = user.email;
+                loadAllData();
+            } else {
+                // User is signed out
+                loginScreen.style.display = 'flex';
+                adminDashboard.style.display = 'none';
             }
-        ];
+        });
 
         // Login functionality
-        function handleLogin(e) {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Simple authentication (in production, use proper backend authentication)
-            if (username === 'admin' && password === 'admin123') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('adminDashboard').style.display = 'block';
-                document.getElementById('adminUsername').textContent = username;
-                updateDashboard();
-            } else {
-                showAlert('loginAlert', 'Invalid username or password', 'danger');
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = 'Logging in...<span class="loading-spinner"></span>';
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showAlert('loginAlert', 'Login successful!', 'success');
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMessage = 'Login failed. Please check your credentials.';
+                if (error.code === 'auth/invalid-credential') {
+                    errorMessage = 'Invalid email or password.';
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password.';
+                }
+                showAlert('loginAlert', errorMessage, 'danger');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
             }
-        }
+        });
 
-        function logout() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('adminDashboard').style.display = 'none';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-        }
-
-        // Tab management
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            
-            if (tabName === 'blog') renderBlogTable();
-            if (tabName === 'resources') renderResourceTable();
-            if (tabName === 'executives') renderExecutiveTable();
-        }
+        // Logout functionality
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Error logging out. Please try again.');
+            }
+        });
 
         // Alert functionality
         function showAlert(elementId, message, type) {
@@ -803,172 +847,399 @@
             setTimeout(() => alert.classList.remove('show'), 5000);
         }
 
-        // Dashboard updates
-        function updateDashboard() {
-            document.getElementById('totalBlogs').textContent = blogPosts.length;
-            document.getElementById('totalResources').textContent = resources.length;
-            document.getElementById('totalExecutives').textContent = executives.length;
-            renderBlogTable();
-        }
+        // Tab Management
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tabName + 'Tab').classList.add('active');
+            });
+        });
 
-        // Blog Management
-        function addBlogPost(e) {
-            e.preventDefault();
-            const newPost = {
-                id: blogPosts.length + 1,
-                title: document.getElementById('blogTitle').value,
-                category: document.getElementById('blogCategory').value,
-                content: document.getElementById('blogContent').value,
-                date: new Date().toISOString().split('T')[0]
-            };
-            blogPosts.unshift(newPost);
-            e.target.reset();
-            showAlert('blogAlert', 'Blog post added successfully!', 'success');
-            updateDashboard();
-        }
+        // Image option toggles
+        document.getElementById('blogImageOption').addEventListener('change', function() {
+            const option = this.value;
+            document.getElementById('blogImageUrlGroup').style.display = option === 'url' ? 'block' : 'none';
+            document.getElementById('blogImageUploadGroup').style.display = option === 'upload' ? 'block' : 'none';
+            document.getElementById('blogStockGroup').style.display = option === 'stock' ? 'block' : 'none';
+        });
 
-        function renderBlogTable() {
-            const tbody = document.getElementById('blogTableBody');
-            tbody.innerHTML = blogPosts.map(post => `
-                <tr>
-                    <td>${post.date}</td>
-                    <td>${post.title}</td>
-                    <td>${post.category}</td>
-                    <td class="action-buttons">
-                        <button class="btn btn-danger" onclick="deleteBlog(${post.id})">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+        document.getElementById('resourceFileOption').addEventListener('change', function() {
+            const option = this.value;
+            document.getElementById('resourceUrlGroup').style.display = option === 'url' ? 'block' : 'none';
+            document.getElementById('resourceUploadGroup').style.display = option === 'upload' ? 'block' : 'none';
+            document.getElementById('resourceGdriveGroup').style.display = option === 'gdrive' ? 'block' : 'none';
+            document.getElementById('resourceDropboxGroup').style.display = option === 'dropbox' ? 'block' : 'none';
+        });
 
-        function deleteBlog(id) {
-            if (confirm('Are you sure you want to delete this blog post?')) {
-                blogPosts = blogPosts.filter(post => post.id !== id);
-                renderBlogTable();
-                updateDashboard();
-            }
-        }
-
-        // Resource Management
-        function addResource(e) {
-            e.preventDefault();
-            const newResource = {
-                id: resources.length + 1,
-                title: document.getElementById('resourceTitle').value,
-                category: document.getElementById('resourceCategory').value,
-                description: document.getElementById('resourceDescription').value,
-                link: document.getElementById('resourceLink').value
-            };
-            resources.push(newResource);
-            e.target.reset();
-            showAlert('resourceAlert', 'Resource added successfully!', 'success');
-            updateDashboard();
-        }
-
-        function renderResourceTable() {
-            const tbody = document.getElementById('resourceTableBody');
-            tbody.innerHTML = resources.map(resource => `
-                <tr>
-                    <td>${resource.title}</td>
-                    <td>${resource.category}</td>
-                    <td>${resource.description.substring(0, 60)}...</td>
-                    <td class="action-buttons">
-                        <button class="btn btn-danger" onclick="deleteResource(${resource.id})">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function deleteResource(id) {
-            if (confirm('Are you sure you want to delete this resource?')) {
-                resources = resources.filter(resource => resource.id !== id);
-                renderResourceTable();
-                updateDashboard();
-            }
-        }
-
-        // Executive Management
-        function addExecutive(e) {
-            e.preventDefault();
-            
-            let imageUrl = '';
-            const imageOption = document.getElementById('execImageOption').value;
-            
-            if (imageOption === 'url') {
-                imageUrl = document.getElementById('execImage').value;
-            } else if (imageOption === 'upload') {
-                const file = document.getElementById('execImageUpload').files[0];
-                if (file) {
-                    // In production, upload to server and get URL
-                    imageUrl = URL.createObjectURL(file);
-                }
-            } else if (imageOption === 'avatar') {
-                imageUrl = document.getElementById('selectedExecAvatar').value;
-            }
-            
-            const newExec = {
-                id: executives.length + 1,
-                name: document.getElementById('execName').value,
-                position: document.getElementById('execPosition').value,
-                bio: document.getElementById('execBio').value,
-                image: imageUrl
-            };
-            executives.push(newExec);
-            e.target.reset();
-            document.getElementById('execImageOption').value = 'none';
-            toggleExecImageInput();
-            showAlert('executiveAlert', 'Executive added successfully!', 'success');
-            updateDashboard();
-        }
-
-        function toggleExecImageInput() {
-            const option = document.getElementById('execImageOption').value;
+        document.getElementById('execImageOption').addEventListener('change', function() {
+            const option = this.value;
             document.getElementById('execImageUrlGroup').style.display = option === 'url' ? 'block' : 'none';
             document.getElementById('execImageUploadGroup').style.display = option === 'upload' ? 'block' : 'none';
             document.getElementById('execAvatarGroup').style.display = option === 'avatar' ? 'block' : 'none';
-        }
+        });
 
-        function previewExecImage(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('execImagePreview');
-            
+        // Stock image selection
+        document.querySelectorAll('.stock-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.stock-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('selectedBlogStock').value = this.getAttribute('data-stock-url');
+            });
+        });
+
+        // Avatar selection
+        document.querySelectorAll('.avatar-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('selectedExecAvatar').value = this.getAttribute('data-avatar-url');
+            });
+        });
+
+        // Image preview
+        document.getElementById('blogImageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                    document.getElementById('blogImagePreview').innerHTML = 
+                        `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
                 };
                 reader.readAsDataURL(file);
             }
-        }
+        });
 
-        function selectAvatar(type, url) {
-            document.getElementById('selectedExecAvatar').value = url;
-            
-            // Highlight selected avatar
-            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-        }
-
-        function renderExecutiveTable() {
-            const tbody = document.getElementById('executiveTableBody');
-            tbody.innerHTML = executives.map(exec => `
-                <tr>
-                    <td>${exec.name}</td>
-                    <td>${exec.position}</td>
-                    <td>${exec.image ? 'Yes' : 'No'}</td>
-                    <td class="action-buttons">
-                        <button class="btn btn-danger" onclick="deleteExecutive(${exec.id})">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function deleteExecutive(id) {
-            if (confirm('Are you sure you want to delete this executive?')) {
-                executives = executives.filter(exec => exec.id !== id);
-                renderExecutiveTable();
-                updateDashboard();
+        document.getElementById('execImageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('execImagePreview').innerHTML = 
+                        `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
             }
+        });
+
+        document.getElementById('resourceFileUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('resourceFilePreview').innerHTML = 
+                    `<div class="file-info"><strong>File:</strong> ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)</div>`;
+            }
+        });
+
+        // Upload file to Firebase Storage
+        async function uploadFile(file, path) {
+            const storageRef = ref(storage, path);
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            return downloadURL;
+        }
+
+        // BLOG MANAGEMENT
+        document.getElementById('blogForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Publishing...<span class="loading-spinner"></span>';
+            
+            try {
+                let imageUrl = '';
+                const imageOption = document.getElementById('blogImageOption').value;
+                
+                if (imageOption === 'url') {
+                    imageUrl = document.getElementById('blogImageUrl').value;
+                } else if (imageOption === 'upload') {
+                    const file = document.getElementById('blogImageUpload').files[0];
+                    if (file) {
+                        imageUrl = await uploadFile(file, `blog-images/${Date.now()}_${file.name}`);
+                    }
+                } else if (imageOption === 'stock') {
+                    imageUrl = document.getElementById('selectedBlogStock').value;
+                }
+                
+                const blogData = {
+                    title: document.getElementById('blogTitle').value,
+                    category: document.getElementById('blogCategory').value,
+                    content: document.getElementById('blogContent').value,
+                    imageUrl: imageUrl,
+                    createdAt: Timestamp.now(),
+                    date: new Date().toISOString().split('T')[0]
+                };
+                
+                await addDoc(collection(db, 'blogs'), blogData);
+                
+                showAlert('blogAlert', 'Blog post published successfully!', 'success');
+                document.getElementById('blogForm').reset();
+                document.getElementById('blogImageOption').value = 'none';
+                document.getElementById('blogImageOption').dispatchEvent(new Event('change'));
+                document.getElementById('blogImagePreview').innerHTML = '';
+                document.querySelectorAll('.stock-option').forEach(opt => opt.classList.remove('selected'));
+                
+                loadBlogs();
+            } catch (error) {
+                console.error('Error adding blog:', error);
+                showAlert('blogAlert', 'Error publishing blog post. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publish Post';
+            }
+        });
+
+        async function loadBlogs() {
+            try {
+                const blogsQuery = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(blogsQuery);
+                
+                const tbody = document.getElementById('blogTableBody');
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No blog posts yet</td></tr>';
+                } else {
+                    tbody.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const blog = doc.data();
+                        const row = `
+                            <tr>
+                                <td>${blog.date || 'N/A'}</td>
+                                <td>${blog.title}</td>
+                                <td>${blog.category}</td>
+                                <td class="action-buttons">
+                                    <button class="btn btn-danger" onclick="window.deleteBlog('${doc.id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                }
+                
+                document.getElementById('totalBlogs').textContent = querySnapshot.size;
+            } catch (error) {
+                console.error('Error loading blogs:', error);
+            }
+        }
+
+        window.deleteBlog = async function(id) {
+            if (confirm('Are you sure you want to delete this blog post?')) {
+                try {
+                    await deleteDoc(doc(db, 'blogs', id));
+                    showAlert('blogAlert', 'Blog post deleted successfully!', 'success');
+                    loadBlogs();
+                } catch (error) {
+                    console.error('Error deleting blog:', error);
+                    alert('Error deleting blog post. Please try again.');
+                }
+            }
+        };
+
+        // RESOURCE MANAGEMENT
+        document.getElementById('resourceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Adding...<span class="loading-spinner"></span>';
+            
+            try {
+                let resourceUrl = '';
+                const fileOption = document.getElementById('resourceFileOption').value;
+                
+                if (fileOption === 'url') {
+                    resourceUrl = document.getElementById('resourceLink').value;
+                } else if (fileOption === 'upload') {
+                    const file = document.getElementById('resourceFileUpload').files[0];
+                    if (file) {
+                        resourceUrl = await uploadFile(file, `resources/${Date.now()}_${file.name}`);
+                    }
+                } else if (fileOption === 'gdrive') {
+                    resourceUrl = document.getElementById('resourceGdriveLink').value;
+                } else if (fileOption === 'dropbox') {
+                    resourceUrl = document.getElementById('resourceDropboxLink').value;
+                }
+                
+                const resourceData = {
+                    title: document.getElementById('resourceTitle').value,
+                    category: document.getElementById('resourceCategory').value,
+                    description: document.getElementById('resourceDescription').value,
+                    link: resourceUrl,
+                    fileType: fileOption,
+                    createdAt: Timestamp.now()
+                };
+                
+                await addDoc(collection(db, 'resources'), resourceData);
+                
+                showAlert('resourceAlert', 'Resource added successfully!', 'success');
+                document.getElementById('resourceForm').reset();
+                document.getElementById('resourceFileOption').value = 'url';
+                document.getElementById('resourceFileOption').dispatchEvent(new Event('change'));
+                document.getElementById('resourceFilePreview').innerHTML = '';
+                
+                loadResources();
+            } catch (error) {
+                console.error('Error adding resource:', error);
+                showAlert('resourceAlert', 'Error adding resource. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Resource';
+            }
+        });
+
+        async function loadResources() {
+            try {
+                const resourcesQuery = query(collection(db, 'resources'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(resourcesQuery);
+                
+                const tbody = document.getElementById('resourceTableBody');
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No resources yet</td></tr>';
+                } else {
+                    tbody.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const resource = doc.data();
+                        const row = `
+                            <tr>
+                                <td>${resource.title}</td>
+                                <td>${resource.category}</td>
+                                <td>${resource.description.substring(0, 60)}...</td>
+                                <td class="action-buttons">
+                                    <button class="btn btn-danger" onclick="window.deleteResource('${doc.id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                }
+                
+                document.getElementById('totalResources').textContent = querySnapshot.size;
+            } catch (error) {
+                console.error('Error loading resources:', error);
+            }
+        }
+
+        window.deleteResource = async function(id) {
+            if (confirm('Are you sure you want to delete this resource?')) {
+                try {
+                    await deleteDoc(doc(db, 'resources', id));
+                    showAlert('resourceAlert', 'Resource deleted successfully!', 'success');
+                    loadResources();
+                } catch (error) {
+                    console.error('Error deleting resource:', error);
+                    alert('Error deleting resource. Please try again.');
+                }
+            }
+        };
+
+        // EXECUTIVE MANAGEMENT
+        document.getElementById('executiveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Adding...<span class="loading-spinner"></span>';
+            
+            try {
+                let imageUrl = '';
+                const imageOption = document.getElementById('execImageOption').value;
+                
+                if (imageOption === 'url') {
+                    imageUrl = document.getElementById('execImage').value;
+                } else if (imageOption === 'upload') {
+                    const file = document.getElementById('execImageUpload').files[0];
+                    if (file) {
+                        imageUrl = await uploadFile(file, `executives/${Date.now()}_${file.name}`);
+                    }
+                } else if (imageOption === 'avatar') {
+                    imageUrl = document.getElementById('selectedExecAvatar').value;
+                }
+                
+                const executiveData = {
+                    name: document.getElementById('execName').value,
+                    position: document.getElementById('execPosition').value,
+                    bio: document.getElementById('execBio').value,
+                    image: imageUrl,
+                    createdAt: Timestamp.now()
+                };
+                
+                await addDoc(collection(db, 'executives'), executiveData);
+                
+                showAlert('executiveAlert', 'Executive added successfully!', 'success');
+                document.getElementById('executiveForm').reset();
+                document.getElementById('execImageOption').value = 'none';
+                document.getElementById('execImageOption').dispatchEvent(new Event('change'));
+                document.getElementById('execImagePreview').innerHTML = '';
+                document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                
+                loadExecutives();
+            } catch (error) {
+                console.error('Error adding executive:', error);
+                showAlert('executiveAlert', 'Error adding executive. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Executive';
+            }
+        });
+
+        async function loadExecutives() {
+            try {
+                const executivesQuery = query(collection(db, 'executives'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(executivesQuery);
+                
+                const tbody = document.getElementById('executiveTableBody');
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No executives yet</td></tr>';
+                } else {
+                    tbody.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const exec = doc.data();
+                        const row = `
+                            <tr>
+                                <td>${exec.name}</td>
+                                <td>${exec.position}</td>
+                                <td>${exec.image ? 'Yes' : 'No'}</td>
+                                <td class="action-buttons">
+                                    <button class="btn btn-danger" onclick="window.deleteExecutive('${doc.id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                }
+                
+                document.getElementById('totalExecutives').textContent = querySnapshot.size;
+            } catch (error) {
+                console.error('Error loading executives:', error);
+            }
+        }
+
+        window.deleteExecutive = async function(id) {
+            if (confirm('Are you sure you want to delete this executive?')) {
+                try {
+                    await deleteDoc(doc(db, 'executives', id));
+                    showAlert('executiveAlert', 'Executive deleted successfully!', 'success');
+                    loadExecutives();
+                } catch (error) {
+                    console.error('Error deleting executive:', error);
+                    alert('Error deleting executive. Please try again.');
+                }
+            }
+        };
+
+        // Load all data
+        function loadAllData() {
+            loadBlogs();
+            loadResources();
+            loadExecutives();
         }
     </script>
 </body>

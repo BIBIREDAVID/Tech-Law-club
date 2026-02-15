@@ -25,7 +25,6 @@
             --card-bg: #ffffff;
         }
 
-        /* Auto Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --white: #1a1a1a;
@@ -205,6 +204,14 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2.5rem;
+            min-height: 300px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--primary-blue);
         }
 
         .blog-card {
@@ -242,6 +249,13 @@
         .blog-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 15px 40px rgba(0,102,204,0.15);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
         }
 
         .blog-card-content {
@@ -297,7 +311,6 @@
             transform: translateY(-2px);
         }
 
-        /* Connect With Us Footer Section */
         .connect-footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: #ffffff;
@@ -519,12 +532,14 @@
             <button class="filter-btn" onclick="filterBlog('IT Law')">IT Law</button>
             <button class="filter-btn" onclick="filterBlog('Privacy')">Privacy</button>
             <button class="filter-btn" onclick="filterBlog('Cybersecurity')">Cybersecurity</button>
+            <button class="filter-btn" onclick="filterBlog('General')">General</button>
         </div>
 
-        <div id="blogGrid" class="blog-grid"></div>
+        <div id="blogGrid" class="blog-grid">
+            <div class="loading">Loading blog posts...</div>
+        </div>
     </div>
 
-    <!-- Connect With Us Footer -->
     <div class="connect-footer">
         <div class="connect-container">
             <h2>Connect With Us</h2>
@@ -576,67 +591,73 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
-    <script>
-        const blogPosts = [
-            {
-                id: 1,
-                title: "Understanding Data Protection Laws in 2025",
-                category: "Privacy",
-                content: "Data protection has become increasingly important in our digital age. This article explores the latest developments in data protection legislation and how organizations can ensure compliance with evolving regulations...",
-                date: "2025-10-20",
-                slug: "understanding-data-protection-2025"
-            },
-            {
-                id: 2,
-                title: "Cybersecurity Compliance for Businesses",
-                category: "Cybersecurity",
-                content: "Organizations must navigate complex cybersecurity regulations. Here's what you need to know about compliance requirements, best practices, and legal implications of data breaches...",
-                date: "2025-10-18",
-                slug: "cybersecurity-compliance-businesses"
-            },
-            {
-                id: 3,
-                title: "AI and Intellectual Property Rights",
-                category: "IT Law",
-                content: "As AI technology advances, questions about IP rights become more complex. This post examines the legal landscape surrounding AI-generated content and ownership disputes...",
-                date: "2025-10-15",
-                slug: "ai-intellectual-property-rights"
-            },
-            {
-                id: 4,
-                title: "GDPR Compliance Guide for Startups",
-                category: "Privacy",
-                content: "A comprehensive guide for tech startups navigating GDPR compliance requirements in the European market...",
-                date: "2025-10-12",
-                slug: "gdpr-compliance-startups"
-            },
-            {
-                id: 5,
-                title: "Blockchain Regulation: Current State and Future",
-                category: "IT Law",
-                content: "Exploring how different jurisdictions are approaching blockchain regulation and what it means for businesses...",
-                date: "2025-10-10",
-                slug: "blockchain-regulation-future"
-            },
-            {
-                id: 6,
-                title: "Zero Trust Security: Legal Implications",
-                category: "Cybersecurity",
-                content: "Understanding the legal framework around implementing zero trust security architectures in organizations...",
-                date: "2025-10-08",
-                slug: "zero-trust-security-legal"
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+            authDomain: "techlawclub-93ed6.firebaseapp.com",
+            projectId: "techlawclub-93ed6",
+            storageBucket: "techlawclub-93ed6.firebasestorage.app",
+            messagingSenderId: "309868998174",
+            appId: "1:309868998174:web:8cab8a65209c56598e480f",
+            measurementId: "G-6G0DG1WTFP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allBlogPosts = [];
+        let currentFilter = 'all';
+
+        // Fetch blog posts from Firestore
+        async function fetchBlogPosts() {
+            try {
+                const blogsQuery = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(blogsQuery);
+                
+                allBlogPosts = [];
+                querySnapshot.forEach((doc) => {
+                    allBlogPosts.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                renderBlog(currentFilter);
+            } catch (error) {
+                console.error('Error fetching blog posts:', error);
+                document.getElementById('blogGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">Unable to load blog posts. Please try again later.</p>
+                    </div>
+                `;
             }
-        ];
+        }
 
         function renderBlog(filter = 'all') {
             const grid = document.getElementById('blogGrid');
-            const filtered = filter === 'all' ? blogPosts : blogPosts.filter(p => p.category === filter);
+            const filtered = filter === 'all' ? allBlogPosts : allBlogPosts.filter(p => p.category === filter);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">No blog posts found${filter !== 'all' ? ' in this category' : ''}.</p>
+                    </div>
+                `;
+                return;
+            }
             
             grid.innerHTML = filtered.map(post => `
                 <div class="blog-card">
+                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.title}" class="blog-card-image">` : ''}
                     <div class="blog-card-content">
-                        <span class="blog-category">${post.category}</span>
-                        <div class="blog-date">${post.date}</div>
+                        <span class="blog-category">${post.category || 'General'}</span>
+                        <div class="blog-date">${post.date || new Date(post.createdAt?.seconds * 1000).toLocaleDateString() || 'Recent'}</div>
                         <h3>${post.title}</h3>
                         <p>${post.content.substring(0, 150)}...</p>
                         <a href="blog-post.html?id=${post.id}" class="btn">Read More</a>
@@ -645,11 +666,12 @@
             `).join('');
         }
 
-        function filterBlog(category) {
+        window.filterBlog = function(category) {
+            currentFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             renderBlog(category);
-        }
+        };
 
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
@@ -657,6 +679,8 @@
             navLinks.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+
+        window.toggleMenu = toggleMenu;
 
         document.addEventListener('click', (e) => {
             const navLinks = document.getElementById('navLinks');
@@ -669,7 +693,8 @@
             }
         });
 
-        renderBlog();
+        // Load blog posts on page load
+        fetchBlogPosts();
     </script>
 </body>
 </html>

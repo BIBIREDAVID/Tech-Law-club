@@ -247,6 +247,8 @@
             box-shadow: 0 8px 25px rgba(255,255,255,0.4);
         }
 
+
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -726,7 +728,24 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
-    <script>
+    <script type="module">
+        // Import Firebase modules (optional - only if you plan to use Firebase on this page later)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+            authDomain: "techlawclub-93ed6.firebaseapp.com",
+            projectId: "techlawclub-93ed6",
+            storageBucket: "techlawclub-93ed6.firebasestorage.app",
+            messagingSenderId: "309868998174",
+            appId: "1:309868998174:web:8cab8a65209c56598e480f",
+            measurementId: "G-6G0DG1WTFP"
+        };
+
+        // Initialize Firebase (optional - included for future use)
+        const app = initializeApp(firebaseConfig);
+
         // Scroll effect for header
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
@@ -744,6 +763,8 @@
             navLinks.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+
+        window.toggleMenu = toggleMenu;
 
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {

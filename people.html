@@ -26,7 +26,6 @@
             --meta-gray: #666;
         }
 
-        /* Auto Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --white: #1a1a1a;
@@ -201,163 +200,36 @@
             border-radius: 2px;
         }
 
-        /* Dean Section */
-        .dean-grid {
+        .executives-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .dean-card {
+        .executive-card {
             background: var(--card-bg);
             border-radius: 15px;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
         @media (prefers-color-scheme: dark) {
-            .dean-card {
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            .executive-card {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
             }
         }
 
-        .dean-card:hover {
+        .executive-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,102,204,0.2);
+            box-shadow: 0 12px 35px rgba(0,102,204,0.2);
         }
 
-        .dean-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 3rem;
-            font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,102,204,0.3);
-            overflow: hidden;
-        }
-
-        .dean-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .dean-name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--dark-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .dean-title {
-            color: var(--primary-blue);
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .dean-bio {
-            color: var(--meta-gray);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* Current Executives - Single Image */
-        .executives-showcase {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .executives-showcase {
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            }
-        }
-
-        .executives-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 15px;
-            margin: 2rem 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .executives-contacts {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: var(--light-gray);
-            border-radius: 25px;
-            transition: all 0.3s;
-        }
-
-        .contact-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,102,204,0.2);
-        }
-
-        .contact-icon {
-            font-size: 1.2rem;
-        }
-
-        .contact-link {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Former Administration */
-        .former-admin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .admin-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .admin-card {
-                box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            }
-        }
-
-        .admin-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,102,204,0.15);
-        }
-
-        .admin-img {
-            width: 100px;
-            height: 100px;
+        .executive-img {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             margin: 0 auto 1rem;
@@ -365,83 +237,43 @@
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             overflow: hidden;
         }
 
-        .admin-img img {
+        .executive-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .admin-name {
-            font-size: 1.1rem;
+        .executive-name {
+            font-size: 1.3rem;
             font-weight: bold;
             color: var(--dark-blue);
             margin-bottom: 0.3rem;
         }
 
-        .admin-position {
-            color: var(--meta-gray);
-            font-size: 0.9rem;
-        }
-
-        .admin-year {
-            color: var(--primary-blue);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            font-weight: 600;
-        }
-
-        /* Patrons Section */
-        .patrons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .patron-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid var(--primary-blue);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .patron-card {
-                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            }
-        }
-
-        .patron-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 12px 35px rgba(0,102,204,0.2);
-        }
-
-        .patron-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--dark-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .patron-title {
+        .executive-position {
             color: var(--primary-blue);
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
-        .patron-description {
+        .executive-bio {
             color: var(--meta-gray);
+            font-size: 0.95rem;
             line-height: 1.6;
         }
 
-        /* Connect With Us Footer Section */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+        }
+
         .connect-footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: #ffffff;
@@ -554,7 +386,6 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             nav {
                 padding: 0 1rem;
@@ -610,19 +441,12 @@
                 padding: 2rem 1rem;
             }
 
-            .dean-grid,
-            .former-admin-grid,
-            .patrons-grid {
+            .executives-grid {
                 grid-template-columns: 1fr;
             }
 
             .social-links {
                 gap: 1rem;
-            }
-
-            .executives-contacts {
-                flex-direction: column;
-                align-items: center;
             }
         }
 
@@ -656,72 +480,19 @@
 
     <div class="page-header">
         <h1>Meet Our People</h1>
-        <p>The leadership, patrons, and team behind Tech Law Club</p>
+        <p>The leadership and team behind Tech Law Club</p>
     </div>
 
     <div class="container">
-        <!-- Deans Section -->
-        <div class="section">
-            <h2 class="section-title">Our Deans</h2>
-            <div class="dean-grid" id="deansGrid"></div>
-        </div>
-
         <!-- Current Executives Section -->
         <div class="section">
             <h2 class="section-title">Current Executive Team</h2>
-            <div class="executives-showcase">
-                <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 1rem;">
-                    Academic Session 2024/2025
-                </p>
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200" 
-                     alt="Executive Team" 
-                     class="executives-image"
-                     id="executivesImage">
-                <p style="margin-top: 1rem; font-style: italic; color: var(--meta-gray);">
-                    Our dedicated executive team working together for excellence
-                </p>
-                
-                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dark-blue);">Contact Our Executives</h3>
-                <div class="executives-contacts">
-                    <div class="contact-item">
-                        <span class="contact-icon">👤</span>
-                        <div>
-                            <div style="font-weight: 600; color: var(--text-gray);">President</div>
-                            <a href="tel:+2348012345678" class="contact-link">+234 801 234 5678</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-icon">👤</span>
-                        <div>
-                            <div style="font-weight: 600; color: var(--text-gray);">Vice President</div>
-                            <a href="tel:+2348098765432" class="contact-link">+234 809 876 5432</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-icon">👤</span>
-                        <div>
-                            <div style="font-weight: 600; color: var(--text-gray);">General Secretary</div>
-                            <a href="tel:+2347011223344" class="contact-link">+234 701 122 3344</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="executives-grid" id="executivesGrid">
+                <div class="loading">Loading executives...</div>
             </div>
-        </div>
-
-        <!-- Former Administration Section -->
-        <div class="section">
-            <h2 class="section-title">Former Administration</h2>
-            <div class="former-admin-grid" id="formerAdminGrid"></div>
-        </div>
-
-        <!-- Patrons Section -->
-        <div class="section">
-            <h2 class="section-title">Our Patrons</h2>
-            <div class="patrons-grid" id="patronsGrid"></div>
         </div>
     </div>
 
-    <!-- Connect With Us Footer -->
     <div class="connect-footer">
         <div class="connect-container">
             <h2>Connect With Us</h2>
@@ -773,132 +544,75 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
-    <script>
-        // Sample Data
-        const deans = [
-            {
-                id: 1,
-                name: "Prof. Adewale Johnson",
-                title: "Dean, Faculty of Law",
-                bio: "Leading legal education with over 25 years of experience in technology law and legal practice.",
-                image: ""
-            },
-            {
-                id: 2,
-                name: "Prof. Ngozi Okonkwo",
-                title: "Associate Dean (Academic)",
-                bio: "Specializing in cyber law and digital rights, championing innovation in legal education.",
-                image: ""
-            }
-        ];
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        const formerAdministration = [
-            {
-                id: 1,
-                name: "Chioma Adeleke",
-                position: "President",
-                year: "2023/2024",
-                image: ""
-            },
-            {
-                id: 2,
-                name: "Oluwaseun Ibrahim",
-                position: "Vice President",
-                year: "2023/2024",
-                image: ""
-            },
-            {
-                id: 3,
-                name: "Fatima Hassan",
-                position: "General Secretary",
-                year: "2023/2024",
-                image: ""
-            },
-            {
-                id: 4,
-                name: "Chukwudi Eze",
-                position: "President",
-                year: "2022/2023",
-                image: ""
-            },
-            {
-                id: 5,
-                name: "Blessing Okafor",
-                position: "Vice President",
-                year: "2022/2023",
-                image: ""
-            },
-            {
-                id: 6,
-                name: "Mohammed Bello",
-                position: "General Secretary",
-                year: "2022/2023",
-                image: ""
-            }
-        ];
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+            authDomain: "techlawclub-93ed6.firebaseapp.com",
+            projectId: "techlawclub-93ed6",
+            storageBucket: "techlawclub-93ed6.firebasestorage.app",
+            messagingSenderId: "309868998174",
+            appId: "1:309868998174:web:8cab8a65209c56598e480f",
+            measurementId: "G-6G0DG1WTFP"
+        };
 
-        const patrons = [
-            {
-                id: 1,
-                name: "Hon. Justice Amina Mohammed",
-                title: "Supreme Court Justice",
-                description: "Distinguished jurist with extensive experience in technology and intellectual property law."
-            },
-            {
-                id: 2,
-                name: "Chief Adeola Williams, SAN",
-                title: "Senior Advocate of Nigeria",
-                description: "Leading expert in cybersecurity law and digital rights, guiding the next generation of tech lawyers."
-            },
-            {
-                id: 3,
-                name: "Dr. Kenneth Ugochukwu",
-                title: "Technology Law Consultant",
-                description: "International consultant specializing in data protection and privacy regulations across Africa."
-            }
-        ];
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        // Render Functions
-        function renderDeans() {
-            const grid = document.getElementById('deansGrid');
-            grid.innerHTML = deans.map(dean => `
-                <div class="dean-card">
-                    <div class="dean-img">
-                        ${dean.image ? `<img src="${dean.image}" alt="${dean.name}">` : dean.name.charAt(0)}
+        // Fetch executives from Firestore
+        async function fetchExecutives() {
+            try {
+                const executivesQuery = query(collection(db, 'executives'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(executivesQuery);
+                
+                const executives = [];
+                querySnapshot.forEach((doc) => {
+                    executives.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                renderExecutives(executives);
+            } catch (error) {
+                console.error('Error fetching executives:', error);
+                document.getElementById('executivesGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                        <p style="color: var(--text-gray);">Unable to load executives. Please try again later.</p>
                     </div>
-                    <div class="dean-name">${dean.name}</div>
-                    <div class="dean-title">${dean.title}</div>
-                    <p class="dean-bio">${dean.bio}</p>
-                </div>
-            `).join('');
+                `;
+            }
         }
 
-        function renderFormerAdmin() {
-            const grid = document.getElementById('formerAdminGrid');
-            grid.innerHTML = formerAdministration.map(admin => `
-                <div class="admin-card">
-                    <div class="admin-img">
-                        ${admin.image ? `<img src="${admin.image}" alt="${admin.name}">` : admin.name.charAt(0)}
+        function renderExecutives(executives) {
+            const grid = document.getElementById('executivesGrid');
+            
+            if (executives.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                        <p style="color: var(--text-gray);">No executives added yet.</p>
                     </div>
-                    <div class="admin-name">${admin.name}</div>
-                    <div class="admin-position">${admin.position}</div>
-                    <div class="admin-year">${admin.year}</div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = executives.map(exec => `
+                <div class="executive-card">
+                    <div class="executive-img">
+                        ${exec.image ? `<img src="${exec.image}" alt="${exec.name}">` : exec.name.charAt(0)}
+                    </div>
+                    <div class="executive-name">${exec.name}</div>
+                    <div class="executive-position">${exec.position}</div>
+                    <p class="executive-bio">${exec.bio}</p>
                 </div>
             `).join('');
         }
 
-        function renderPatrons() {
-            const grid = document.getElementById('patronsGrid');
-            grid.innerHTML = patrons.map(patron => `
-                <div class="patron-card">
-                    <div class="patron-name">${patron.name}</div>
-                    <div class="patron-title">${patron.title}</div>
-                    <p class="patron-description">${patron.description}</p>
-                </div>
-            `).join('');
-        }
-
-        // Hamburger Menu
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');
@@ -906,7 +620,8 @@
             hamburger.classList.toggle('active');
         }
 
-        // Close menu when clicking outside
+        window.toggleMenu = toggleMenu;
+
         document.addEventListener('click', (e) => {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');
@@ -918,10 +633,8 @@
             }
         });
 
-        // Initialize
-        renderDeans();
-        renderFormerAdmin();
-        renderPatrons();
+        // Load executives on page load
+        fetchExecutives();
     </script>
 </body>
 </html>
