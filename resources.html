@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resources - Tech Law Club</title>
-    <meta name="description" content="Access IT law past questions, study materials, and comprehensive legal resources">
+    <meta name="description" content="Access IT law resources, past questions, and study materials">
     <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     <style>
@@ -21,11 +21,10 @@
             --white: #ffffff;
             --light-gray: #f5f5f5;
             --text-gray: #333333;
-            --bg-color: #f5f5f5;
+            --bg-color: #ffffff;
             --card-bg: #ffffff;
         }
 
-        /* Auto Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --white: #1a1a1a;
@@ -43,7 +42,6 @@
             line-height: 1.6;
             color: var(--text-gray);
             background: var(--bg-color);
-            transition: background 0.3s, color 0.3s;
         }
 
         @keyframes fadeInUp {
@@ -54,17 +52,6 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
             }
         }
 
@@ -197,9 +184,9 @@
             color: var(--primary-blue);
             border-radius: 25px;
             cursor: pointer;
+            font-size: 1rem;
             transition: all 0.3s;
             font-weight: 600;
-            font-size: 1rem;
         }
 
         .filter-btn.active {
@@ -213,92 +200,103 @@
             transform: translateY(-2px);
         }
 
-        .resources-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            min-height: 300px;
         }
 
-        .resource-item {
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            grid-column: 1/-1;
+        }
+
+        .resource-card {
             background: var(--card-bg);
-            padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            border-left: 5px solid var(--primary-blue);
-            transition: all 0.3s ease;
-            animation: slideInLeft 0.5s ease-out;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
         @media (prefers-color-scheme: dark) {
-            .resource-item {
-                box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            .resource-card {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
             }
         }
 
-        .resource-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 8px 30px rgba(0,102,204,0.15);
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,102,204,0.15);
+        }
+
+        .resource-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
         }
 
         .resource-category {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             color: #ffffff;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
             font-weight: 600;
         }
 
-        .resource-item h3 {
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: bold;
             color: var(--dark-blue);
             margin-bottom: 0.8rem;
-            font-size: 1.3rem;
         }
 
-        .resource-meta {
+        .resource-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .resource-actions {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .resource-meta span {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .resource-meta span {
-                color: #b0b0b0;
-            }
-        }
-
-        .resource-meta span i {
-            margin-right: 0.3rem;
+            gap: 0.5rem;
         }
 
         .btn {
-            background: transparent;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-            padding: 0.7rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            font-weight: 600;
             text-decoration: none;
-            display: inline-block;
-            margin-right: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .btn:hover {
-            background: var(--primary-blue);
-            color: #ffffff;
-            transform: translateY(-2px);
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
         }
 
         .btn-primary {
@@ -308,9 +306,20 @@
 
         .btn-primary:hover {
             background: var(--dark-blue);
+            transform: translateY(-2px);
         }
 
-        /* Connect With Us Footer Section */
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: #ffffff;
+        }
+
         .connect-footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: #ffffff;
@@ -423,11 +432,6 @@
             }
         }
 
-        footer p {
-            position: relative;
-            z-index: 1;
-        }
-
         @media (max-width: 768px) {
             nav {
                 padding: 0 1rem;
@@ -479,22 +483,21 @@
                 font-size: 2rem;
             }
 
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
             .container {
                 padding: 2rem 1rem;
             }
 
-            .resource-item {
-                padding: 1.5rem;
-            }
-
-            .btn {
-                display: block;
-                text-align: center;
-                margin: 0.5rem 0;
-            }
-
             .social-links {
                 gap: 1rem;
+            }
+
+            .resource-actions {
+                flex-direction: column;
             }
         }
 
@@ -520,15 +523,15 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="resources.html" class="active">Resources</a></li>
-                <li><a href="chatbot.html">Chatbot</a></li>                
+                <li><a href="chatbot.html">Chatbot</a></li>
                 <li><a href="people.html">People</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="page-header">
-        <h1>Tech Law Resources</h1>
-        <p>Past questions, study materials, and comprehensive legal resources</p>
+        <h1>Resource Library</h1>
+        <p>Access study materials, past questions, and IT law resources</p>
     </div>
 
     <div class="container">
@@ -539,10 +542,11 @@
             <button class="filter-btn" onclick="filterResources('Study Materials')">Study Materials</button>
         </div>
 
-        <div id="resourcesList" class="resources-list"></div>
+        <div class="resources-grid" id="resourcesGrid">
+            <div class="loading">Loading resources...</div>
+        </div>
     </div>
 
-    <!-- Connect With Us Footer -->
     <div class="connect-footer">
         <div class="connect-container">
             <h2>Connect With Us</h2>
@@ -594,116 +598,117 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
-    <script>
-        const resources = [
-            {
-                id: 1,
-                title: "Information Technology Law Past Questions 2024",
-                category: "Past Questions",
-                description: "Comprehensive collection of IT law exam questions from 2024 with detailed answers and explanations covering data protection, cybersecurity, and intellectual property.",
-                year: "2024",
-                pages: "45 pages"
-            },
-            {
-                id: 2,
-                title: "Information Technology Law Past Questions 2023",
-                category: "Past Questions",
-                description: "Complete set of examination questions from 2023 academic year with model answers and legal references.",
-                year: "2023",
-                pages: "42 pages"
-            },
-            {
-                id: 3,
-                title: "Introduction to Cybersecurity Law",
-                category: "IT Law Aspects",
-                description: "Fundamental concepts and principles of cybersecurity legislation including GDPR, CCPA, and local regulations. Covers incident response requirements and breach notification laws.",
-                year: "2025",
-                pages: "68 pages"
-            },
-            {
-                id: 4,
-                title: "Data Privacy Study Guide",
-                category: "Study Materials",
-                description: "Essential reading material for understanding data privacy regulations and their practical applications in modern organizations.",
-                year: "2025",
-                pages: "95 pages"
-            },
-            {
-                id: 5,
-                title: "Blockchain and Smart Contracts Legal Framework",
-                category: "IT Law Aspects",
-                description: "Explore the legal considerations surrounding blockchain technology, smart contract enforcement, and cryptocurrency regulations across different jurisdictions.",
-                year: "2025",
-                pages: "78 pages"
-            },
-            {
-                id: 6,
-                title: "Information Technology Law Past Questions 2022",
-                category: "Past Questions",
-                description: "Archive of 2022 examination questions with comprehensive answers and case law references.",
-                year: "2022",
-                pages: "40 pages"
-            },
-            {
-                id: 7,
-                title: "E-Commerce Law Essentials",
-                category: "IT Law Aspects",
-                description: "Complete guide to legal issues in electronic commerce including consumer protection, online contracts, and payment security.",
-                year: "2025",
-                pages: "55 pages"
-            },
-            {
-                id: 8,
-                title: "Cloud Computing Legal Issues",
-                category: "Study Materials",
-                description: "Analysis of legal challenges in cloud computing including data sovereignty, service level agreements, and liability frameworks.",
-                year: "2025",
-                pages: "62 pages"
-            },
-            {
-                id: 9,
-                title: "Artificial Intelligence and Law",
-                category: "IT Law Aspects",
-                description: "Examination of AI regulation, algorithmic accountability, and emerging legal frameworks for machine learning systems.",
-                year: "2025",
-                pages: "85 pages"
-            },
-            {
-                id: 10,
-                title: "Internet Law Case Studies",
-                category: "Study Materials",
-                description: "Collection of landmark cases in internet law covering jurisdiction, liability, and digital rights management.",
-                year: "2024",
-                pages: "72 pages"
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+            authDomain: "techlawclub-93ed6.firebaseapp.com",
+            projectId: "techlawclub-93ed6",
+            storageBucket: "techlawclub-93ed6.firebasestorage.app",
+            messagingSenderId: "309868998174",
+            appId: "1:309868998174:web:8cab8a65209c56598e480f",
+            measurementId: "G-6G0DG1WTFP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allResources = [];
+        let currentFilter = 'all';
+
+        // Get file icon based on file type or link
+        function getFileIcon(resource) {
+            const link = resource.link || '';
+            const fileType = resource.fileType || '';
+            
+            if (link.includes('drive.google.com') || fileType === 'gdrive') {
+                return 'fa-google';
+            } else if (link.includes('dropbox.com') || fileType === 'dropbox') {
+                return 'fa-dropbox';
+            } else if (link.toLowerCase().includes('.pdf') || link.toLowerCase().includes('pdf')) {
+                return 'fa-file-pdf-o';
+            } else if (link.toLowerCase().includes('.doc')) {
+                return 'fa-file-word-o';
+            } else if (link.toLowerCase().includes('.ppt')) {
+                return 'fa-file-powerpoint-o';
+            } else if (fileType === 'upload') {
+                return 'fa-file-archive-o';
+            } else {
+                return 'fa-link';
             }
-        ];
+        }
+
+        // Fetch resources from Firestore
+        async function fetchResources() {
+            try {
+                const resourcesQuery = query(collection(db, 'resources'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(resourcesQuery);
+                
+                allResources = [];
+                querySnapshot.forEach((doc) => {
+                    allResources.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                renderResources(currentFilter);
+            } catch (error) {
+                console.error('Error fetching resources:', error);
+                document.getElementById('resourcesGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">Unable to load resources. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
 
         function renderResources(filter = 'all') {
-            const list = document.getElementById('resourcesList');
-            const filtered = filter === 'all' ? resources : resources.filter(r => r.category === filter);
+            const grid = document.getElementById('resourcesGrid');
+            const filtered = filter === 'all' ? allResources : allResources.filter(r => r.category === filter);
             
-            list.innerHTML = filtered.map(resource => `
-                <div class="resource-item">
-                    <span class="resource-category">${resource.category}</span>
-                    <h3>${resource.title}</h3>
-                    <div class="resource-meta">
-                        <span>📅 ${resource.year}</span>
-                        <span>📄 ${resource.pages}</span>
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <i class="fa fa-folder-open" style="font-size: 4rem; color: var(--primary-blue); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">No resources found${filter !== 'all' ? ' in this category' : ''}.</p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for new materials!</p>
                     </div>
-                    <p>${resource.description}</p>
-                    <div style="margin-top: 1rem;">
-                        <a href="#" class="btn btn-primary">Download PDF</a>
-                        <a href="#" class="btn">Preview</a>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(resource => `
+                <div class="resource-card">
+                    <i class="fa ${getFileIcon(resource)} resource-icon"></i>
+                    <span class="resource-category">${resource.category || 'General'}</span>
+                    <div class="resource-title">${resource.title}</div>
+                    <div class="resource-description">${resource.description}</div>
+                    <div class="resource-actions">
+                        <a href="${resource.link}" target="_blank" class="btn btn-primary">
+                            <i class="fa fa-download"></i>
+                            Download
+                        </a>
+                        <a href="${resource.link}" target="_blank" class="btn btn-outline">
+                            <i class="fa fa-eye"></i>
+                            Preview
+                        </a>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterResources(category) {
+        window.filterResources = function(category) {
+            currentFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             renderResources(category);
-        }
+        };
 
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
@@ -711,6 +716,8 @@
             navLinks.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+
+        window.toggleMenu = toggleMenu;
 
         document.addEventListener('click', (e) => {
             const navLinks = document.getElementById('navLinks');
@@ -723,7 +730,8 @@
             }
         });
 
-        renderResources();
+        // Load resources on page load
+        fetchResources();
     </script>
 </body>
 </html>
