@@ -457,6 +457,10 @@
             <p style="margin-top: 1rem; font-size: 0.85rem; color: #999;">
                 Use your Firebase account to login
             </p>
+            <p style="margin-top: 1rem; text-align: center;">
+                <span style="color: #666;">Don't have access?</span>
+                <a href="admin-request-access.html" style="color: #0066cc; font-weight: 600; text-decoration: none;">Request Access</a>
+            </p>
         </div>
     </div>
 
@@ -495,6 +499,7 @@
                 <button class="tab active" data-tab="blog">Manage Blog</button>
                 <button class="tab" data-tab="resources">Manage Resources</button>
                 <button class="tab" data-tab="executives">Manage Executives</button>
+                <button class="tab" data-tab="approvals">Approve Requests</button>
             </div>
 
             <!-- Blog Management -->
@@ -762,6 +767,44 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Approve Requests Tab -->
+            <div id="approvalsTab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Admin Access Requests</h2>
+                        <p style="color: #666; margin-top: 0.5rem;">Review and approve admin access requests</p>
+                    </div>
+
+                    <div id="approvalsAlert" class="alert"></div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Pending Requests</h3>
+                            <div id="pendingRequestsCount" style="font-size: 2rem; font-weight: bold; color: var(--primary-blue);">0</div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Approved</h3>
+                            <div id="approvedRequestsCount" style="font-size: 2rem; font-weight: bold; color: var(--success);">0</div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Rejected</h3>
+                            <div id="rejectedRequestsCount" style="font-size: 2rem; font-weight: bold; color: var(--danger);">0</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #e0e0e0;">
+                        <button class="btn btn-secondary" style="border-radius: 0; border-bottom: 3px solid var(--primary-blue);" onclick="filterRequestsAdmin('pending')">Pending</button>
+                        <button class="btn btn-secondary" style="border-radius: 0; border-bottom: 3px solid transparent;" onclick="filterRequestsAdmin('approved')">Approved</button>
+                        <button class="btn btn-secondary" style="border-radius: 0; border-bottom: 3px solid transparent;" onclick="filterRequestsAdmin('rejected')">Rejected</button>
+                        <button class="btn btn-secondary" style="border-radius: 0; border-bottom: 3px solid transparent;" onclick="filterRequestsAdmin('all')">All</button>
+                    </div>
+
+                    <div id="requestsContainer">
+                        <p style="text-align: center; color: #999; padding: 3rem;">Loading requests...</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -770,7 +813,7 @@
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
 
@@ -1288,7 +1331,193 @@
             loadBlogs();
             loadResources();
             loadExecutives();
+            loadApprovalRequests();
         }
+
+        // Approval Requests Management
+        let allApprovalRequests = [];
+        let currentRequestFilter = 'pending';
+
+        async function loadApprovalRequests() {
+            try {
+                const q = query(collection(db, 'admin_requests'), orderBy('requestedAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allApprovalRequests = [];
+                querySnapshot.forEach((doc) => {
+                    allApprovalRequests.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                updateRequestStats();
+                renderRequests(currentRequestFilter);
+            } catch (error) {
+                console.error('Error loading requests:', error);
+                document.getElementById('requestsContainer').innerHTML = `
+                    <p style="text-align: center; color: #dc3545; padding: 3rem;">Error loading requests. Please refresh the page.</p>
+                `;
+            }
+        }
+
+        function updateRequestStats() {
+            const pending = allApprovalRequests.filter(r => r.status === 'pending').length;
+            const approved = allApprovalRequests.filter(r => r.status === 'approved').length;
+            const rejected = allApprovalRequests.filter(r => r.status === 'rejected').length;
+            
+            document.getElementById('pendingRequestsCount').textContent = pending;
+            document.getElementById('approvedRequestsCount').textContent = approved;
+            document.getElementById('rejectedRequestsCount').textContent = rejected;
+        }
+
+        function renderRequests(filter) {
+            const container = document.getElementById('requestsContainer');
+            let filtered = filter === 'all' ? allApprovalRequests : allApprovalRequests.filter(r => r.status === filter);
+            
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <p style="text-align: center; color: #999; padding: 3rem;">
+                        <i class="fa fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                        No ${filter === 'all' ? '' : filter} requests found
+                    </p>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filtered.map(request => {
+                const date = request.requestedAt?.toDate ? request.requestedAt.toDate().toLocaleDateString() : 'N/A';
+                const time = request.requestedAt?.toDate ? request.requestedAt.toDate().toLocaleTimeString() : '';
+                const statusColor = request.status === 'pending' ? '#ffc107' : request.status === 'approved' ? '#28a745' : '#dc3545';
+                
+                return `
+                    <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 1.5rem; border-left: 4px solid ${statusColor}; position: relative;">
+                        <span style="position: absolute; top: 1rem; right: 1rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: ${statusColor}; color: white;">
+                            ${request.status.toUpperCase()}
+                        </span>
+                        
+                        <h3 style="color: #333; margin-bottom: 1rem;">${request.fullName}</h3>
+                        
+                        <div style="display: flex; gap: 2rem; margin-bottom: 0.8rem; flex-wrap: wrap; color: #666;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa fa-envelope" style="color: var(--primary-blue);"></i>
+                                <span>${request.email}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa fa-phone" style="color: var(--primary-blue);"></i>
+                                <span>${request.phone || 'Not provided'}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa fa-calendar" style="color: var(--primary-blue);"></i>
+                                <span>${date} ${time}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                            <strong>Reason for Access:</strong>
+                            <p style="margin-top: 0.5rem; color: #555; line-height: 1.6;">${request.reason}</p>
+                        </div>
+                        
+                        ${request.status === 'pending' ? `
+                            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                                <button class="btn btn-success" onclick="approveRequestAdmin('${request.id}', '${request.email}', '${request.fullName}')">
+                                    <i class="fa fa-check"></i> Approve & Create Account
+                                </button>
+                                <button class="btn btn-danger" onclick="rejectRequestAdmin('${request.id}')">
+                                    <i class="fa fa-times"></i> Reject
+                                </button>
+                            </div>
+                        ` : request.status === 'approved' ? `
+                            <p style="margin-top: 1rem; color: #28a745; font-size: 0.9rem;">
+                                <i class="fa fa-check-circle"></i> Approved by ${request.approvedBy || 'Admin'} on ${request.approvedAt?.toDate().toLocaleDateString() || 'N/A'}
+                                ${request.temporaryPassword ? `<br><strong>Temp Password:</strong> ${request.temporaryPassword}` : ''}
+                            </p>
+                        ` : `
+                            <p style="margin-top: 1rem; color: #dc3545; font-size: 0.9rem;">
+                                <i class="fa fa-times-circle"></i> Rejected by ${request.rejectedBy || 'Admin'} on ${request.rejectedAt?.toDate().toLocaleDateString() || 'N/A'}
+                            </p>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.filterRequestsAdmin = function(filter) {
+            currentRequestFilter = filter;
+            // Update button styles
+            const buttons = document.querySelectorAll('#approvalsTab .btn-secondary');
+            buttons.forEach(btn => btn.style.borderBottomColor = 'transparent');
+            event.target.style.borderBottomColor = 'var(--primary-blue)';
+            renderRequests(filter);
+        };
+
+        window.approveRequestAdmin = async function(requestId, email, fullName) {
+            const password = prompt('Enter a temporary password for this admin (min 8 characters):');
+            if (!password) return;
+            
+            if (password.length < 8) {
+                showAlert('approvalsAlert', 'Password must be at least 8 characters!', 'danger');
+                return;
+            }
+
+            try {
+                // Import createUserWithEmailAndPassword
+                const { createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js");
+                const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
+                
+                // Create Firebase Auth account
+                await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Update request status
+                await updateDoc(doc(db, 'admin_requests', requestId), {
+                    status: 'approved',
+                    approvedAt: Timestamp.now(),
+                    approvedBy: auth.currentUser.email,
+                    temporaryPassword: password
+                });
+                
+                showAlert('approvalsAlert', `Account created! Email: ${email} | Password: ${password}`, 'success');
+                loadApprovalRequests();
+                
+            } catch (error) {
+                console.error('Error approving:', error);
+                let errorMessage = 'Failed to approve request.';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'Email already has an account. Updating status only.';
+                    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
+                    await updateDoc(doc(db, 'admin_requests', requestId), {
+                        status: 'approved',
+                        approvedAt: Timestamp.now(),
+                        approvedBy: auth.currentUser.email
+                    });
+                    loadApprovalRequests();
+                }
+                
+                showAlert('approvalsAlert', errorMessage, 'danger');
+            }
+        };
+
+        window.rejectRequestAdmin = async function(requestId) {
+            if (!confirm('Are you sure you want to reject this request?')) return;
+            
+            try {
+                const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
+                
+                await updateDoc(doc(db, 'admin_requests', requestId), {
+                    status: 'rejected',
+                    rejectedAt: Timestamp.now(),
+                    rejectedBy: auth.currentUser.email
+                });
+                
+                showAlert('approvalsAlert', 'Request rejected successfully', 'success');
+                loadApprovalRequests();
+                
+            } catch (error) {
+                console.error('Error rejecting:', error);
+                showAlert('approvalsAlert', 'Failed to reject request', 'danger');
+            }
+        };
     </script>
 </body>
 </html>
