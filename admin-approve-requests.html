@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Approve Admin Requests - Tech Law Club</title>
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -306,6 +307,21 @@
         import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
+        // =============================================
+        // EMAILJS CONFIGURATION
+        // 1. Go to https://www.emailjs.com and sign up (free)
+        // 2. Create an Email Service (Gmail recommended)
+        // 3. Create two Email Templates (see guide below)
+        // 4. Replace the values below with your own
+        // =============================================
+        const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';   // From EmailJS → Account → API Keys
+        const EMAILJS_SERVICE_ID   = 'YOUR_SERVICE_ID';            // From EmailJS → Email Services
+        const EMAILJS_APPROVED_TEMPLATE = 'YOUR_APPROVED_TEMPLATE_ID'; // Template for approval
+        const EMAILJS_REJECTED_TEMPLATE = 'YOUR_REJECTED_TEMPLATE_ID'; // Template for rejection
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
         const firebaseConfig = {
             apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
             authDomain: "techlawclub-93ed6.firebaseapp.com",
@@ -460,15 +476,30 @@
                 // Create Firebase Auth account
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
-                // Update request status
+                // Update request status in Firestore
                 await updateDoc(doc(db, 'admin_requests', requestId), {
                     status: 'approved',
                     approvedAt: Timestamp.now(),
                     approvedBy: auth.currentUser.email,
                     temporaryPassword: password
                 });
-                
-                showAlert(`Admin account created successfully! Email: ${email}, Password: ${password}`, 'success');
+
+                // Send approval email via EmailJS
+                try {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVED_TEMPLATE, {
+                        to_name:    fullName,
+                        to_email:   email,
+                        password:   password,
+                        login_url:  window.location.origin + '/admin-firebase.html',
+                        from_name:  'Tech Law Club'
+                    });
+                    showAlert(`✅ Account created and approval email sent to ${email}!`, 'success');
+                } catch (emailError) {
+                    // Account was still created, just email failed
+                    console.error('Email error:', emailError);
+                    showAlert(`✅ Account created for ${email} but email failed. Send login details manually: Password: ${password}`, 'success');
+                }
+
                 fetchRequests();
                 
             } catch (error) {
@@ -476,14 +507,28 @@
                 let errorMessage = 'Failed to approve request.';
                 
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'This email already has an account. Just update the status.';
-                    // Still update status even if account exists
                     await updateDoc(doc(db, 'admin_requests', requestId), {
                         status: 'approved',
                         approvedAt: Timestamp.now(),
                         approvedBy: auth.currentUser.email
                     });
+
+                    // Send email even if account already existed
+                    try {
+                        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVED_TEMPLATE, {
+                            to_name:   fullName,
+                            to_email:  email,
+                            password:  'Use your existing password (or reset it)',
+                            login_url: window.location.origin + '/admin-firebase.html',
+                            from_name: 'Tech Law Club'
+                        });
+                    } catch (emailError) {
+                        console.error('Email error:', emailError);
+                    }
+
+                    showAlert('This email already has an account. Status updated and email sent.', 'success');
                     fetchRequests();
+                    return;
                 }
                 
                 showAlert(errorMessage, 'error');
@@ -492,6 +537,9 @@
 
         window.rejectRequest = async function(requestId) {
             if (!confirm('Are you sure you want to reject this request?')) return;
+
+            // Find the request details for the email
+            const request = allRequests.find(r => r.id === requestId);
             
             try {
                 await updateDoc(doc(db, 'admin_requests', requestId), {
@@ -499,8 +547,25 @@
                     rejectedAt: Timestamp.now(),
                     rejectedBy: auth.currentUser.email
                 });
-                
-                showAlert('Request rejected successfully', 'success');
+
+                // Send rejection email via EmailJS
+                if (request) {
+                    try {
+                        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_REJECTED_TEMPLATE, {
+                            to_name:   request.fullName,
+                            to_email:  request.email,
+                            from_name: 'Tech Law Club',
+                            contact_email: 'info@techlawclub.com'
+                        });
+                        showAlert('Request rejected and notification email sent.', 'success');
+                    } catch (emailError) {
+                        console.error('Email error:', emailError);
+                        showAlert('Request rejected but email notification failed.', 'success');
+                    }
+                } else {
+                    showAlert('Request rejected successfully.', 'success');
+                }
+
                 fetchRequests();
                 
             } catch (error) {
