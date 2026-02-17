@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot - Tech Law Club</title>
-    <meta name="description" content="Get instant answers to your tech law questions from our AI assistant">
+    <title>AI Chatbot - Coming Soon - Tech Law Club</title>
+    <meta name="description" content="Our AI-powered tech law assistant is coming soon">
     <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     <style>
@@ -21,12 +21,10 @@
             --white: #ffffff;
             --light-gray: #f5f5f5;
             --text-gray: #333333;
-            --bg-color: #f5f5f5;
+            --bg-color: #ffffff;
             --card-bg: #ffffff;
-            --border-color: #e0e0e0;
         }
 
-        /* Auto Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --white: #1a1a1a;
@@ -36,7 +34,6 @@
                 --card-bg: #1e1e1e;
                 --primary-blue: #5da3ff;
                 --dark-blue: #4d94ff;
-                --border-color: #3d3d3d;
             }
         }
 
@@ -45,7 +42,17 @@
             line-height: 1.6;
             color: var(--text-gray);
             background: var(--bg-color);
-            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
         @keyframes fadeInUp {
@@ -57,11 +64,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         header {
@@ -148,203 +150,198 @@
             transition: all 0.3s ease;
         }
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .page-header {
-            background: linear-gradient(135deg, #0066cc, #004499);
-            color: #ffffff;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .page-header {
-                background: linear-gradient(135deg, #1a3a5c, #0d2438);
-            }
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .chatbot-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .chatbot-container {
-                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            }
-        }
-
-        .chatbot-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .chatbot-header h2 {
-            color: var(--dark-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .chatbot-header p {
-            color: #666;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .chatbot-header p {
-                color: #b0b0b0;
-            }
-        }
-
-        .suggested-questions {
+        .coming-soon-section {
+            min-height: calc(100vh - 200px);
             display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .suggested-btn {
-            padding: 0.6rem 1.2rem;
-            background: var(--light-gray);
-            border: 2px solid var(--primary-blue);
-            color: var(--primary-blue);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .suggested-btn:hover {
-            background: var(--primary-blue);
-            color: #ffffff;
-        }
-
-        .chatbot-messages {
+        .coming-soon-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
             height: 500px;
-            overflow-y: auto;
-            border: 2px solid var(--border-color);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to bottom, var(--light-gray), var(--card-bg));
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .message {
-            margin-bottom: 1.2rem;
-            padding: 1rem 1.3rem;
-            border-radius: 15px;
-            animation: fadeInUp 0.4s ease-out;
-            max-width: 85%;
+        .coming-soon-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
         }
 
-        .message.bot {
+        .coming-soon-content {
+            max-width: 700px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .robot-icon {
+            font-size: 8rem;
+            color: var(--primary-blue);
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .coming-soon-content h1 {
+            font-size: 3rem;
+            color: var(--dark-blue);
+            margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
-            color: #ffffff;
-            margin-right: auto;
-            box-shadow: 0 4px 15px rgba(0,102,204,0.3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .message.user {
-            background: var(--card-bg);
-            margin-left: auto;
-            border: 2px solid var(--primary-blue);
+        .coming-soon-content h2 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon-content p {
+            font-size: 1.2rem;
             color: var(--text-gray);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .features-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .feature-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
         }
 
         @media (prefers-color-scheme: dark) {
-            .message.user {
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            .feature-item {
+                box-shadow: 0 5px 20px rgba(0,0,0,0.5);
             }
         }
 
-        .chatbot-input {
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,102,204,0.2);
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-item h3 {
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin: 0;
+        }
+
+        .cta-buttons {
             display: flex;
             gap: 1rem;
-        }
-
-        .chatbot-input input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border: 2px solid var(--border-color);
-            border-radius: 25px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: var(--card-bg);
-            color: var(--text-gray);
-        }
-
-        .chatbot-input input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
         }
 
         .btn {
-            background: var(--primary-blue);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
             color: #ffffff;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            font-weight: 600;
         }
 
-        .btn:hover {
-            background: var(--dark-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,102,204,0.3);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,102,204,0.4);
         }
 
-        .chatbot-messages::-webkit-scrollbar {
-            width: 8px;
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
         }
 
-        .chatbot-messages::-webkit-scrollbar-track {
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: #ffffff;
+        }
+
+        .progress-indicator {
+            margin: 2rem auto;
+            max-width: 400px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
             background: var(--light-gray);
             border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
         }
 
-        .chatbot-messages::-webkit-scrollbar-thumb {
-            background: var(--primary-blue);
-            border-radius: 10px;
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
+            width: 75%;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .chatbot-messages::-webkit-scrollbar-thumb:hover {
-            background: var(--dark-blue);
+        .progress-text {
+            text-align: center;
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
         footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: #ffffff;
             text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
+            padding: 2rem;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -396,36 +393,33 @@
                 border-bottom: 1px solid rgba(255,255,255,0.1);
             }
 
-            .nav-links a::after {
-                display: none;
+            .robot-icon {
+                font-size: 5rem;
             }
 
-            .page-header h1 {
+            .coming-soon-content h1 {
                 font-size: 2rem;
             }
 
-            .container {
-                padding: 0 1rem;
+            .coming-soon-content h2 {
+                font-size: 1.5rem;
             }
 
-            .chatbot-container {
-                padding: 1.5rem;
+            .coming-soon-content p {
+                font-size: 1rem;
             }
 
-            .chatbot-messages {
-                height: 400px;
+            .features-preview {
+                grid-template-columns: 1fr;
             }
 
-            .message {
-                max-width: 90%;
-            }
-
-            .chatbot-input {
+            .cta-buttons {
                 flex-direction: column;
             }
 
             .btn {
                 width: 100%;
+                justify-content: center;
             }
         }
 
@@ -433,8 +427,6 @@
             overflow-x: hidden;
             width: 100%;
             max-width: 100vw;
-            margin: 0;
-            padding: 0;
         }
     </style>
 </head>
@@ -451,41 +443,79 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="resources.html">Resources</a></li>
-                <li><a href="chatbot.html" class="active">Chatbot</a></li>                
+                <li><a href="chatbot.html" class="active">Chatbot</a></li>
                 <li><a href="people.html">People</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="page-header">
-        <h1>Tech Law Assistant</h1>
-        <p>Your AI-powered guide to information technology law</p>
-    </div>
+    <div class="coming-soon-section">
+        <div class="coming-soon-content">
+            <div class="robot-icon">
+                <i class="fa fa-robot"></i>
+            </div>
+            
+            <h1>AI Assistant</h1>
+            <h2>Coming Soon!</h2>
+            
+            <p>
+                We're building an intelligent AI chatbot that will answer all your tech law questions instantly. 
+                Get ready for 24/7 legal guidance powered by advanced AI technology!
+            </p>
 
-    <div class="container">
-        <div class="chatbot-container">
-            <div class="chatbot-header">
-                <h2>💬 Ask Me Anything</h2>
-                <p>Get instant answers about IT law, cybersecurity, data privacy, and more</p>
+            <div class="progress-indicator">
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+                <div class="progress-text">In Development • 75% Complete</div>
             </div>
 
-            <div class="suggested-questions">
-                <button class="suggested-btn" onclick="askQuestion('What is GDPR?')">What is GDPR?</button>
-                <button class="suggested-btn" onclick="askQuestion('Explain data protection laws')">Data Protection</button>
-                <button class="suggested-btn" onclick="askQuestion('What are cybersecurity regulations?')">Cybersecurity</button>
-                <button class="suggested-btn" onclick="askQuestion('Tell me about intellectual property in tech')">IP Rights</button>
-            </div>
-
-            <div class="chatbot-messages" id="chatMessages">
-                <div class="message bot">
-                    Hello! I'm your Tech Law Assistant. Ask me anything about Information Technology Law, cybersecurity regulations, data privacy, intellectual property, or any tech law topic! How can I help you today?
+            <div class="features-preview">
+                <div class="feature-item">
+                    <i class="fa fa-comments"></i>
+                    <h3>Instant Answers</h3>
+                    <p>Get immediate responses to your legal questions</p>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa fa-brain"></i>
+                    <h3>AI-Powered</h3>
+                    <p>Advanced machine learning for accurate advice</p>
+                </div>
+                
+                <div class="feature-item">
+                    <i class="fa fa-clock"></i>
+                    <h3>24/7 Available</h3>
+                    <p>Access legal guidance anytime, anywhere</p>
                 </div>
             </div>
 
-            <div class="chatbot-input">
-                <input type="text" id="chatInput" placeholder="Type your question here..." onkeypress="handleChatEnter(event)">
-                <button class="btn" onclick="sendMessage()">Send</button>
+            <p style="margin-top: 2rem; font-size: 1rem;">
+                <strong>What you can expect:</strong><br>
+                📚 Comprehensive IT law knowledge base<br>
+                🔍 Search through past questions and case studies<br>
+                💡 Personalized recommendations and guidance<br>
+                🎓 Study help and exam preparation
+            </p>
+
+            <div class="cta-buttons">
+                <a href="resources.html" class="btn btn-primary">
+                    <i class="fa fa-book"></i>
+                    Explore Resources
+                </a>
+                <a href="blog.html" class="btn btn-outline">
+                    <i class="fa fa-newspaper"></i>
+                    Read Blog
+                </a>
             </div>
+
+            <p style="margin-top: 3rem; font-size: 0.9rem; color: var(--text-gray);">
+                Want to be notified when we launch?<br>
+                <a href="mailto:info@techlawclub.com?subject=Notify me about AI Chatbot Launch" 
+                   style="color: var(--primary-blue); font-weight: 600; text-decoration: none;">
+                    <i class="fa fa-envelope"></i> Get Notified
+                </a>
+            </p>
         </div>
     </div>
 
@@ -495,58 +525,6 @@
     </footer>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const messagesDiv = document.getElementById('chatMessages');
-            
-            messagesDiv.innerHTML += `<div class="message user">${message}</div>`;
-            input.value = '';
-
-            setTimeout(() => {
-                const response = getChatbotResponse(message);
-                messagesDiv.innerHTML += `<div class="message bot">${response}</div>`;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }, 500);
-        }
-
-        function askQuestion(question) {
-            document.getElementById('chatInput').value = question;
-            sendMessage();
-        }
-
-        function handleChatEnter(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        function getChatbotResponse(message) {
-            const msg = message.toLowerCase();
-            
-            if (msg.includes('gdpr')) {
-                return "The General Data Protection Regulation (GDPR) is a comprehensive data privacy law enacted by the European Union in 2018. It regulates how organizations collect, process, store, and share personal data of EU residents. Key principles include lawfulness, fairness, transparency, purpose limitation, data minimization, accuracy, storage limitation, integrity, and confidentiality. Organizations must obtain explicit consent, provide data access rights, and report breaches within 72 hours. Non-compliance can result in fines up to €20 million or 4% of global annual turnover.";
-            } else if (msg.includes('data protection') || msg.includes('privacy')) {
-                return "Data protection laws regulate how personal information is collected, used, and stored. Key regulations include GDPR (EU), CCPA (California), and various local data protection acts. These laws require organizations to implement strict security measures, obtain proper consent, provide individuals with rights over their data (access, rectification, erasure), conduct privacy impact assessments, and report data breaches promptly. Organizations must appoint Data Protection Officers, maintain processing records, and ensure third-party processors comply with regulations.";
-            } else if (msg.includes('cybersecurity')) {
-                return "Cybersecurity law encompasses regulations about protecting digital systems and data from threats. This includes incident reporting requirements (like SEC cybersecurity rules), security standards (ISO 27001, NIST Framework), and liability frameworks. Organizations must implement appropriate technical and organizational measures, conduct regular security assessments, train employees, and maintain incident response plans. Key regulations include the NIS Directive (EU), CISA (US), and sector-specific requirements for healthcare (HIPAA), financial services (GLBA), and critical infrastructure.";
-            } else if (msg.includes('intellectual property') || msg.includes('ip')) {
-                return "Intellectual Property in tech law covers patents (protecting inventions and algorithms), copyrights (software code, digital content), trademarks (brand protection online), and trade secrets (proprietary technology). Key issues include software licensing (open source vs proprietary), API copyrightability, patent trolls, fair use in digital contexts, digital rights management (DRM), and protecting AI-generated works. Organizations must carefully document invention disclosures, register IP appropriately, and establish clear ownership through employment agreements and contractor clauses.";
-            } else if (msg.includes('blockchain') || msg.includes('crypto')) {
-                return "Blockchain and cryptocurrency law is rapidly evolving. Key considerations include regulatory classification of tokens (securities vs utilities), AML/KYC compliance, smart contract enforceability, taxation of crypto transactions, cross-border regulatory challenges, and consumer protection. Different jurisdictions have varying approaches: some embrace innovation with clear frameworks (Switzerland, Singapore), others impose strict regulations (China ban), while many are still developing comprehensive policies. Issues include determining legal jurisdiction, liability for smart contract bugs, and reconciling immutable blockchain records with GDPR's right to erasure.";
-            } else if (msg.includes('past question') || msg.includes('resource')) {
-                return "You can find comprehensive past questions and study materials in our Resources section! We have collections organized by year and topic including IT Law fundamentals, data protection, cybersecurity, e-commerce law, and intellectual property. Each resource includes detailed answers and explanations to help you understand legal principles. Visit the Resources page to browse and download materials.";
-            } else if (msg.includes('ai') || msg.includes('artificial intelligence')) {
-                return "AI law addresses the legal challenges posed by artificial intelligence systems. Key areas include algorithmic accountability and transparency, bias in AI systems, liability for AI decisions (who's responsible when AI makes mistakes?), data privacy in machine learning, intellectual property ownership of AI-generated works, and employment law implications of automation. The EU AI Act classifies AI systems by risk level and imposes requirements accordingly. Issues include explainability requirements, audit rights, human oversight mandates, and establishing clear liability chains for autonomous systems.";
-            } else if (msg.includes('cloud')) {
-                return "Cloud computing law involves complex legal issues including data sovereignty (where data is physically stored matters legally), service level agreements (SLAs) defining uptime and performance guarantees, liability limitations and indemnification clauses, data security and breach notification requirements, compliance with industry regulations, and vendor lock-in concerns. Organizations must address jurisdictional issues when data crosses borders, ensure cloud providers meet compliance requirements, establish clear data ownership rights, implement proper encryption, and maintain business continuity plans for cloud service failures.";
-            } else if (msg.includes('e-commerce') || msg.includes('online')) {
-                return "E-commerce law governs online business transactions covering consumer protection rules (cooling-off periods, return rights), online contract formation and validity, electronic signatures, payment security (PCI DSS compliance), distance selling regulations, advertising standards, taxation of digital goods, and cross-border transaction challenges. Businesses must provide clear terms and conditions, transparent pricing, secure payment processing, privacy policies, and accessible dispute resolution mechanisms. Special considerations include geo-blocking regulations, VAT/sales tax collection, and compliance with consumer protection laws across different jurisdictions.";
-            } else {
-                return "That's an interesting question about tech law! This rapidly evolving field covers data protection, cybersecurity, intellectual property, e-commerce, blockchain, AI regulation, and emerging technologies. For detailed information on specific topics, I recommend checking our blog and resources sections. You can also ask me more specific questions about any area of technology law - I'm here to help! Some popular topics include GDPR compliance, cybersecurity requirements, patent protection for software, and blockchain regulation.";
-            }
-        }
-
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');
