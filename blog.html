@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - Tech Law Club</title>
     <meta name="description" content="Stay updated with the latest in technology law, cybersecurity, data privacy, and more">
+    
+    <!-- Preconnect for faster Firebase loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    
     <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     <style>
@@ -58,6 +63,74 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        /* Skeleton Loading Animations */
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .skeleton-image {
+            height: 200px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        .skeleton-content {
+            padding: 2rem;
+        }
+
+        .skeleton-badge {
+            height: 20px;
+            width: 80px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            width: 80%;
+        }
+
+        .skeleton-text {
+            height: 16px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text:nth-child(2) { width: 95%; }
+        .skeleton-text:nth-child(3) { width: 90%; }
+        .skeleton-text:last-child { width: 70%; }
+
+        @media (prefers-color-scheme: dark) {
+            .skeleton-image, .skeleton-badge, .skeleton-title, .skeleton-text {
+                background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%);
+                background-size: 200% 100%;
+            }
+            .skeleton-card {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            }
         }
 
         header {
@@ -144,6 +217,18 @@
             transition: all 0.3s ease;
         }
 
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .page-header {
             background: linear-gradient(135deg, #0066cc, #004499);
             color: #ffffff;
@@ -207,13 +292,6 @@
             min-height: 300px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            font-size: 1.2rem;
-            color: var(--primary-blue);
-        }
-
         .blog-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -262,24 +340,6 @@
             padding: 2rem;
         }
 
-        .blog-date {
-            color: var(--primary-blue);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .blog-card h3 {
-            color: var(--dark-blue);
-            margin-bottom: 0.8rem;
-            font-size: 1.4rem;
-            transition: color 0.3s;
-        }
-
-        .blog-card:hover h3 {
-            color: var(--primary-blue);
-        }
-
         .blog-category {
             display: inline-block;
             background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
@@ -291,24 +351,70 @@
             font-weight: 600;
         }
 
-        .btn {
-            background: transparent;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-            padding: 0.8rem 1.8rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
+        .blog-title {
+            color: var(--dark-blue);
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+            transition: color 0.3s;
         }
 
-        .btn:hover {
-            background: var(--primary-blue);
-            color: #ffffff;
-            transform: translateY(-2px);
+        .blog-card:hover .blog-title {
+            color: var(--primary-blue);
+        }
+
+        .blog-excerpt {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .read-more {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .read-more:hover {
+            color: var(--dark-blue);
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .load-more-btn {
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .load-more-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
+        }
+
+        .load-more-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .connect-footer {
@@ -423,11 +529,6 @@
             }
         }
 
-        footer p {
-            position: relative;
-            z-index: 1;
-        }
-
         @media (max-width: 768px) {
             nav {
                 padding: 0 1rem;
@@ -500,6 +601,20 @@
             margin: 0;
             padding: 0;
         }
+
+        /* Performance hint for animated elements */
+        .blog-card, .skeleton-card {
+            will-change: transform;
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -528,15 +643,82 @@
 
     <div class="container">
         <div class="filter-section">
-            <button class="filter-btn active" onclick="filterBlog('all')">All Posts</button>
-            <button class="filter-btn" onclick="filterBlog('IT Law')">IT Law</button>
-            <button class="filter-btn" onclick="filterBlog('Privacy')">Privacy</button>
-            <button class="filter-btn" onclick="filterBlog('Cybersecurity')">Cybersecurity</button>
-            <button class="filter-btn" onclick="filterBlog('General')">General</button>
+            <button class="filter-btn active" onclick="filterPosts('all')">All Posts</button>
+            <button class="filter-btn" onclick="filterPosts('IT Law')">IT Law</button>
+            <button class="filter-btn" onclick="filterPosts('Privacy')">Privacy</button>
+            <button class="filter-btn" onclick="filterPosts('Cybersecurity')">Cybersecurity</button>
+            <button class="filter-btn" onclick="filterPosts('General')">General</button>
         </div>
 
-        <div id="blogGrid" class="blog-grid">
-            <div class="loading">Loading blog posts...</div>
+        <div class="blog-grid" id="postsGrid">
+            <!-- Skeleton Loading -->
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-badge"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="load-more-btn" style="display: none;">
+                <i class="fa fa-refresh"></i> Load More Posts
+            </button>
         </div>
     </div>
 
@@ -546,21 +728,21 @@
             <p>Follow us on social media and stay connected with Tech Law Club</p>
             
             <div class="social-links">
-                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-linkedin"></i>
                     </div>
                     <span class="social-label">LinkedIn</span>
                 </a>
                 
-                <a href="https://www.instagram.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.instagram.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-instagram"></i>
                     </div>
                     <span class="social-label">Instagram</span>
                 </a>
                 
-                <a href="https://twitter.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://twitter.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-twitter"></i> 
                     </div>
@@ -592,9 +774,9 @@
     </footer>
 
     <script type="module">
-        // Import Firebase modules
+        // Import Firebase modules with pagination support
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, orderBy, limit, startAfter } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -611,42 +793,161 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let allBlogPosts = [];
+        // State management
+        let allPosts = [];
+        let lastVisible = null;
+        const POSTS_PER_PAGE = 9;
+        let hasMore = true;
+        let isLoading = false;
         let currentFilter = 'all';
 
-        // Fetch blog posts from Firestore
-        async function fetchBlogPosts() {
+        // Cache configuration (5 minutes)
+        const CACHE_KEY = 'blog_posts_cache';
+        const CACHE_DURATION = 5 * 60 * 1000;
+
+        // LocalStorage cache functions
+        function getCachedPosts() {
             try {
-                const blogsQuery = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'));
-                const querySnapshot = await getDocs(blogsQuery);
-                
-                allBlogPosts = [];
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_DURATION) {
+                        console.log('✓ Using cached blog posts');
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('Cache read error:', error);
+            }
+            return null;
+        }
+
+        function setCachedPosts(posts) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data: posts,
+                    timestamp: Date.now()
+                }));
+                console.log('✓ Posts cached successfully');
+            } catch (error) {
+                console.error('Cache write error:', error);
+            }
+        }
+
+        // Fetch initial posts with pagination
+        async function fetchPosts() {
+            if (isLoading) return;
+            
+            // Check cache first
+            const cached = getCachedPosts();
+            if (cached && cached.length > 0) {
+                allPosts = cached;
+                renderPosts(currentFilter);
+                hasMore = false;
+                updateLoadMoreButton();
+                return;
+            }
+
+            isLoading = true;
+
+            try {
+                const q = query(
+                    collection(db, 'blogs'),
+                    orderBy('createdAt', 'desc'),
+                    limit(POSTS_PER_PAGE)
+                );
+                const querySnapshot = await getDocs(q);
+
+                allPosts = [];
                 querySnapshot.forEach((doc) => {
-                    allBlogPosts.push({
+                    allPosts.push({
                         id: doc.id,
                         ...doc.data()
                     });
                 });
-                
-                renderBlog(currentFilter);
+
+                lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+                hasMore = querySnapshot.docs.length === POSTS_PER_PAGE;
+
+                setCachedPosts(allPosts);
+                renderPosts(currentFilter);
+                updateLoadMoreButton();
             } catch (error) {
-                console.error('Error fetching blog posts:', error);
-                document.getElementById('blogGrid').innerHTML = `
+                console.error('Error fetching posts:', error);
+                document.getElementById('postsGrid').innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                        <p style="color: var(--text-gray); font-size: 1.1rem;">Unable to load blog posts. Please try again later.</p>
+                        <i class="fa fa-exclamation-triangle" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">Unable to load posts. Please try again later.</p>
                     </div>
                 `;
+            } finally {
+                isLoading = false;
             }
         }
 
-        function renderBlog(filter = 'all') {
-            const grid = document.getElementById('blogGrid');
-            const filtered = filter === 'all' ? allBlogPosts : allBlogPosts.filter(p => p.category === filter);
+        // Load more posts
+        window.loadMorePosts = async function() {
+            if (!hasMore || !lastVisible || isLoading) return;
+
+            isLoading = true;
+            const btn = document.getElementById('loadMoreBtn');
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+            btn.disabled = true;
+
+            try {
+                const q = query(
+                    collection(db, 'blogs'),
+                    orderBy('createdAt', 'desc'),
+                    startAfter(lastVisible),
+                    limit(POSTS_PER_PAGE)
+                );
+                const querySnapshot = await getDocs(q);
+
+                querySnapshot.forEach((doc) => {
+                    allPosts.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+                hasMore = querySnapshot.docs.length === POSTS_PER_PAGE;
+
+                setCachedPosts(allPosts);
+                renderPosts(currentFilter);
+                updateLoadMoreButton();
+            } catch (error) {
+                console.error('Error loading more:', error);
+                btn.innerHTML = '<i class="fa fa-refresh"></i> Load More Posts';
+                btn.disabled = false;
+            } finally {
+                isLoading = false;
+            }
+        };
+
+        // Update load more button visibility
+        function updateLoadMoreButton() {
+            const btn = document.getElementById('loadMoreBtn');
+            if (hasMore && currentFilter === 'all') {
+                btn.style.display = 'inline-flex';
+                btn.innerHTML = '<i class="fa fa-refresh"></i> Load More Posts';
+                btn.disabled = false;
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        // Render posts to DOM
+        function renderPosts(filter = 'all') {
+            const grid = document.getElementById('postsGrid');
+            const filtered = filter === 'all' ? allPosts : allPosts.filter(post => post.category === filter);
             
             if (filtered.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                        <p style="color: var(--text-gray); font-size: 1.1rem;">No blog posts found${filter !== 'all' ? ' in this category' : ''}.</p>
+                        <i class="fa fa-folder-open" style="font-size: 4rem; color: var(--primary-blue); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">No posts found${filter !== 'all' ? ' in this category' : ''}.</p>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">Check back soon for new content!</p>
                     </div>
                 `;
                 return;
@@ -654,25 +955,32 @@
             
             grid.innerHTML = filtered.map(post => `
                 <div class="blog-card">
-                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.title}" class="blog-card-image">` : ''}
+                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.title}" class="blog-card-image" loading="lazy">` : '<div class="blog-card-image"></div>'}
                     <div class="blog-card-content">
                         <span class="blog-category">${post.category || 'General'}</span>
-                        <div class="blog-date">${post.date || new Date(post.createdAt?.seconds * 1000).toLocaleDateString() || 'Recent'}</div>
-                        <h3>${post.title}</h3>
-                        <p>${post.content.substring(0, 150)}...</p>
-                        <a href="blog-post.html?id=${post.id}" class="btn">Read More</a>
+                        <h3 class="blog-title">${post.title}</h3>
+                        <p class="blog-excerpt">${post.content ? post.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 'Read more to discover the full content.'}</p>
+                        <div class="blog-meta">
+                            <span><i class="fa fa-calendar"></i> ${post.date || new Date(post.createdAt?.seconds * 1000).toLocaleDateString() || 'Recent'}</span>
+                            <a href="blog-post.html?id=${post.id}" class="read-more">
+                                Read More <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        window.filterBlog = function(category) {
+        // Filter posts by category
+        window.filterPosts = function(category) {
             currentFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            renderBlog(category);
+            renderPosts(category);
+            updateLoadMoreButton();
         };
 
+        // Toggle mobile menu
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');
@@ -682,6 +990,7 @@
 
         window.toggleMenu = toggleMenu;
 
+        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');
@@ -693,8 +1002,17 @@
             }
         });
 
-        // Load blog posts on page load
-        fetchBlogPosts();
+        // Load posts on page load
+        fetchPosts();
+
+        // Log performance
+        window.addEventListener('load', () => {
+            if (window.performance) {
+                const perfData = window.performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log(`⚡ Page loaded in ${pageLoadTime}ms`);
+            }
+        });
     </script>
 </body>
 </html>

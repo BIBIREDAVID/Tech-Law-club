@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resources - Tech Law Club</title>
     <meta name="description" content="Access IT law resources, past questions, and study materials">
+    
+    <!-- Preconnect for faster Firebase loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    
     <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     <style>
@@ -58,6 +63,106 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        /* Skeleton Loading Animations */
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            animation: fadeInUp 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e0e0e0, #f0f0f0);
+        }
+
+        .skeleton-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            margin-bottom: 1rem;
+        }
+
+        .skeleton-badge {
+            height: 20px;
+            width: 100px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .skeleton-title {
+            height: 24px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            width: 80%;
+        }
+
+        .skeleton-text {
+            height: 16px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text:nth-child(2) { width: 95%; }
+        .skeleton-text:nth-child(3) { width: 90%; }
+        .skeleton-text:last-child { width: 70%; }
+
+        .skeleton-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .skeleton-button {
+            height: 40px;
+            flex: 1;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 25px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .skeleton-icon, .skeleton-badge, .skeleton-title, .skeleton-text, .skeleton-button {
+                background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%);
+                background-size: 200% 100%;
+            }
+            .skeleton-card {
+                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            }
+            .skeleton-card::before {
+                background: linear-gradient(90deg, #3d3d3d, #4d4d4d);
+            }
         }
 
         header {
@@ -144,6 +249,18 @@
             transition: all 0.3s ease;
         }
 
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         .page-header {
             background: linear-gradient(135deg, #0066cc, #004499);
             color: #ffffff;
@@ -207,14 +324,6 @@
             min-height: 300px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            font-size: 1.2rem;
-            color: var(--primary-blue);
-            grid-column: 1/-1;
-        }
-
         .resource-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -225,6 +334,12 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+            opacity: 0;
+        }
+
+        .resource-card.visible {
+            opacity: 1;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -508,6 +623,20 @@
             margin: 0;
             padding: 0;
         }
+
+        /* Performance hint for animated elements */
+        .resource-card, .skeleton-card {
+            will-change: transform, opacity;
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -543,7 +672,43 @@
         </div>
 
         <div class="resources-grid" id="resourcesGrid">
-            <div class="loading">Loading resources...</div>
+            <!-- Skeleton Loading -->
+            <div class="skeleton-card">
+                <div class="skeleton-icon"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-buttons">
+                    <div class="skeleton-button"></div>
+                    <div class="skeleton-button"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-icon"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-buttons">
+                    <div class="skeleton-button"></div>
+                    <div class="skeleton-button"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-icon"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-buttons">
+                    <div class="skeleton-button"></div>
+                    <div class="skeleton-button"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -553,21 +718,21 @@
             <p>Follow us on social media and stay connected with Tech Law Club</p>
             
             <div class="social-links">
-                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-linkedin"></i>
                     </div>
                     <span class="social-label">LinkedIn</span>
                 </a>
                 
-                <a href="https://www.instagram.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.instagram.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-instagram"></i>
                     </div>
                     <span class="social-label">Instagram</span>
                 </a>
                 
-                <a href="https://twitter.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://twitter.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-twitter"></i> 
                     </div>
@@ -621,6 +786,39 @@
         let allResources = [];
         let currentFilter = 'all';
 
+        // Cache configuration (10 minutes for resources)
+        const CACHE_KEY = 'resources_cache';
+        const CACHE_DURATION = 10 * 60 * 1000;
+
+        // LocalStorage cache functions
+        function getCachedResources() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_DURATION) {
+                        console.log('✓ Using cached resources');
+                        return data;
+                    }
+                }
+            } catch (error) {
+                console.error('Cache read error:', error);
+            }
+            return null;
+        }
+
+        function setCachedResources(resources) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data: resources,
+                    timestamp: Date.now()
+                }));
+                console.log('✓ Resources cached successfully');
+            } catch (error) {
+                console.error('Cache write error:', error);
+            }
+        }
+
         // Get file icon based on file type or link
         function getFileIcon(resource) {
             const link = resource.link || '';
@@ -645,6 +843,14 @@
 
         // Fetch resources from Firestore
         async function fetchResources() {
+            // Check cache first
+            const cached = getCachedResources();
+            if (cached && cached.length > 0) {
+                allResources = cached;
+                renderResources(currentFilter);
+                return;
+            }
+
             try {
                 const resourcesQuery = query(collection(db, 'resources'), orderBy('createdAt', 'desc'));
                 const querySnapshot = await getDocs(resourcesQuery);
@@ -657,11 +863,13 @@
                     });
                 });
                 
+                setCachedResources(allResources);
                 renderResources(currentFilter);
             } catch (error) {
                 console.error('Error fetching resources:', error);
                 document.getElementById('resourcesGrid').innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <i class="fa fa-exclamation-triangle" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 1rem;"></i>
                         <p style="color: var(--text-gray); font-size: 1.1rem;">Unable to load resources. Please try again later.</p>
                     </div>
                 `;
@@ -690,17 +898,38 @@
                     <div class="resource-title">${resource.title}</div>
                     <div class="resource-description">${resource.description}</div>
                     <div class="resource-actions">
-                        <a href="${resource.link}" target="_blank" class="btn btn-primary">
+                        <a href="${resource.link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                             <i class="fa fa-download"></i>
                             Download
                         </a>
-                        <a href="${resource.link}" target="_blank" class="btn btn-outline">
+                        <a href="${resource.link}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
                             <i class="fa fa-eye"></i>
                             Preview
                         </a>
                     </div>
                 </div>
             `).join('');
+
+            // Trigger fade-in animation with Intersection Observer
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.resource-card').forEach(card => {
+                    observer.observe(card);
+                });
+            } else {
+                // Fallback for browsers without Intersection Observer
+                document.querySelectorAll('.resource-card').forEach(card => {
+                    card.classList.add('visible');
+                });
+            }
         }
 
         window.filterResources = function(category) {
@@ -732,6 +961,15 @@
 
         // Load resources on page load
         fetchResources();
+
+        // Log performance
+        window.addEventListener('load', () => {
+            if (window.performance) {
+                const perfData = window.performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log(`⚡ Page loaded in ${pageLoadTime}ms`);
+            }
+        });
     </script>
 </body>
 </html>

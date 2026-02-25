@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Law Club - Home</title>
     <meta name="description" content="Your comprehensive resource for Information Technology Law, past questions, and legal insights in the digital age">
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="./plugins/fontawesome/css/font-awesome.min.css">
     
@@ -26,7 +32,6 @@
             --card-bg: #ffffff;
         }
 
-        /* Auto Dark Mode Support */
         @media (prefers-color-scheme: dark) {
             :root {
                 --white: #1a1a1a;
@@ -247,8 +252,6 @@
             box-shadow: 0 8px 25px rgba(255,255,255,0.4);
         }
 
-
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -351,7 +354,6 @@
             transform: translateX(5px);
         }
 
-        /* Connect With Us Footer Section */
         .connect-footer {
             background: linear-gradient(135deg, var(--dark-blue), #001a3d);
             color: #ffffff;
@@ -482,7 +484,6 @@
             z-index: 1;
         }
 
-        /* Responsive styles */
         @media (max-width: 1024px) {
             .container {
                 padding: 3rem 1.5rem;
@@ -617,6 +618,24 @@
             margin: 0;
             padding: 0;
         }
+
+        /* Performance optimization - will-change for animated elements */
+        .hero::before,
+        .hero::after,
+        .feature-icon {
+            will-change: transform;
+        }
+
+        /* Reduce motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -676,28 +695,27 @@
         </div>
     </div>
 
-    <!-- Connect With Us Footer -->
     <div class="connect-footer">
         <div class="connect-container">
             <h2>Connect With Us</h2>
             <p>Follow us on social media and stay connected with Tech Law Club</p>
             
             <div class="social-links">
-                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.linkedin.com/company/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-linkedin"></i>
                     </div>
                     <span class="social-label">LinkedIn</span>
                 </a>
                 
-                <a href="https://www.instagram.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://www.instagram.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-instagram"></i>
                     </div>
                     <span class="social-label">Instagram</span>
                 </a>
                 
-                <a href="https://twitter.com/techlawclub" target="_blank" class="social-link">
+                <a href="https://twitter.com/techlawclub" target="_blank" rel="noopener noreferrer" class="social-link">
                     <div class="social-icon">
                         <i class="fa fa-twitter"></i> 
                     </div>
@@ -728,33 +746,56 @@
         <p style="margin-top: 0.5rem; opacity: 0.8;">Empowering legal minds in the digital age</p>
     </footer>
 
+    <!-- Optimized JavaScript - Deferred loading -->
     <script type="module">
-        // Import Firebase modules (optional - only if you plan to use Firebase on this page later)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        // Lazy load Firebase only when needed
+        let firebaseLoaded = false;
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
-            authDomain: "techlawclub-93ed6.firebaseapp.com",
-            projectId: "techlawclub-93ed6",
-            storageBucket: "techlawclub-93ed6.firebasestorage.app",
-            messagingSenderId: "309868998174",
-            appId: "1:309868998174:web:8cab8a65209c56598e480f",
-            measurementId: "G-6G0DG1WTFP"
-        };
+        async function loadFirebase() {
+            if (firebaseLoaded) return;
+            firebaseLoaded = true;
 
-        // Initialize Firebase (optional - included for future use)
-        const app = initializeApp(firebaseConfig);
+            try {
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js");
+
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
+                    authDomain: "techlawclub-93ed6.firebaseapp.com",
+                    projectId: "techlawclub-93ed6",
+                    storageBucket: "techlawclub-93ed6.firebasestorage.app",
+                    messagingSenderId: "309868998174",
+                    appId: "1:309868998174:web:8cab8a65209c56598e480f",
+                    measurementId: "G-6G0DG1WTFP"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                console.log('Firebase initialized');
+            } catch (error) {
+                console.error('Firebase init error:', error);
+            }
+        }
+
+        // Load Firebase after page is fully loaded
+        window.addEventListener('load', () => {
+            setTimeout(loadFirebase, 2000);
+        });
 
         // Scroll effect for header
+        let ticking = false;
         window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const header = document.getElementById('header');
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
-        });
+        }, { passive: true });
 
         // Hamburger menu toggle
         function toggleMenu() {
@@ -777,6 +818,25 @@
                 hamburger.classList.remove('active');
             }
         });
+
+        // Intersection Observer for lazy animation
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        }
     </script>
 </body>
 </html>
