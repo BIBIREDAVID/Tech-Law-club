@@ -65,6 +65,7 @@
             gap: 1rem;
             margin-bottom: 2rem;
             border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -83,6 +84,10 @@
             border-bottom-color: #0066cc;
         }
 
+        .tab:hover {
+            color: #0066cc;
+        }
+
         .requests-grid {
             display: grid;
             gap: 1.5rem;
@@ -94,6 +99,12 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .request-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .request-card.pending {
@@ -136,6 +147,7 @@
         .request-info h3 {
             color: #333;
             margin-bottom: 1rem;
+            padding-right: 100px;
         }
 
         .request-detail {
@@ -166,6 +178,7 @@
         .reason-box p {
             color: #555;
             line-height: 1.6;
+            margin-top: 0.5rem;
         }
 
         .request-actions {
@@ -194,6 +207,8 @@
 
         .btn-approve:hover {
             background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
         }
 
         .btn-reject {
@@ -203,6 +218,8 @@
 
         .btn-reject:hover {
             background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
         }
 
         .btn:disabled {
@@ -227,6 +244,18 @@
             border-radius: 8px;
             margin-bottom: 1.5rem;
             display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .alert.success {
@@ -239,6 +268,20 @@
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0066cc;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -254,86 +297,31 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .request-info h3 {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .status-badge {
+                position: static;
+                display: inline-block;
+                margin-bottom: 1rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
         }
-            @keyframes skeleton-loading {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
-}
-
-    .skeleton-card {
-        background: var(--card-bg);
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        animation: fadeInUp 0.6s ease-out;
-    }
-
-    .skeleton-image {
-        height: 200px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-    }
-
-    .skeleton-content { padding: 1.5rem; }
-
-    .skeleton-badge {
-        height: 20px; width: 80px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-        border-radius: 10px; margin-bottom: 1rem;
-    }
-
-    .skeleton-title {
-        height: 24px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-        border-radius: 4px; margin-bottom: 1rem; width: 80%;
-    }
-
-    .skeleton-text {
-        height: 16px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-        border-radius: 4px; margin-bottom: 0.5rem;
-    }
-
-    .skeleton-text:nth-child(2) { width: 95%; }
-    .skeleton-text:nth-child(3) { width: 90%; }
-    .skeleton-text:last-child { width: 70%; }
-
-    @media (prefers-color-scheme: dark) {
-        .skeleton-image, .skeleton-badge, .skeleton-title, .skeleton-text {
-            background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%);
-            background-size: 200% 100%;
-        }
-        .skeleton-card { box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-    }
-
-    .load-more-container { text-align: center; margin: 3rem 0; }
-
-    .load-more-btn {
-        padding: 1rem 3rem;
-        background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
-        color: white; border: none; border-radius: 50px;
-        font-size: 1.1rem; font-weight: 600; cursor: pointer;
-        transition: all 0.3s; display: inline-flex;
-        align-items: center; gap: 0.5rem;
-    }
-
-    .load-more-btn:hover:not(:disabled) {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 102, 204, 0.4);
-    }
-
-    .load-more-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="admin-firebase.html" class="back-link">
+            <i class="fa fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+
         <h1><i class="fa fa-users-cog"></i> Admin Access Requests</h1>
         <p class="subtitle">Review and approve admin access requests</p>
 
@@ -383,20 +371,18 @@
         import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         // =============================================
-        // EMAILJS CONFIGURATION
-        // 1. Go to https://www.emailjs.com and sign up (free)
-        // 2. Create an Email Service (Gmail recommended)
-        // 3. Create two Email Templates (see guide below)
-        // 4. Replace the values below with your own
+        // EMAILJS CONFIGURATION - YOUR CREDENTIALS
         // =============================================
-        const EMAILJS_PUBLIC_KEY   = 'YOUR_EMAILJS_PUBLIC_KEY';   // From EmailJS → Account → API Keys
-        const EMAILJS_SERVICE_ID   = 'YOUR_SERVICE_ID';            // From EmailJS → Email Services
-        const EMAILJS_APPROVED_TEMPLATE = 'YOUR_APPROVED_TEMPLATE_ID'; // Template for approval
-        const EMAILJS_REJECTED_TEMPLATE = 'YOUR_REJECTED_TEMPLATE_ID'; // Template for rejection
+        const EMAILJS_PUBLIC_KEY = 'Sd-xP3BcLW6INQ2yG';
+        const EMAILJS_SERVICE_ID = 'service_u83m00l';
+        const EMAILJS_APPROVED_TEMPLATE = 'template_9z4l15n';
+        const EMAILJS_REJECTED_TEMPLATE = 'template_pu9v4vf';
 
         // Initialize EmailJS
         emailjs.init(EMAILJS_PUBLIC_KEY);
+        console.log('✅ EmailJS initialized');
 
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBeE6F5ORLmds3T96wRragqvwQq1-sk4u4",
             authDomain: "techlawclub-93ed6.firebaseapp.com",
@@ -419,6 +405,7 @@
             if (!user) {
                 window.location.href = 'admin-firebase.html';
             } else {
+                console.log('✅ Admin logged in:', user.email);
                 fetchRequests();
             }
         });
@@ -447,14 +434,16 @@
                     });
                 });
                 
+                console.log(`✅ Loaded ${allRequests.length} requests`);
                 updateStats();
                 renderRequests(currentFilter);
             } catch (error) {
-                console.error('Error fetching requests:', error);
+                console.error('❌ Error fetching requests:', error);
                 document.getElementById('requestsGrid').innerHTML = `
                     <div class="empty-state">
                         <i class="fa fa-exclamation-triangle"></i>
                         <p>Error loading requests. Please refresh the page.</p>
+                        <p style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">${error.message}</p>
                     </div>
                 `;
             }
@@ -502,7 +491,7 @@
                                 </div>
                                 <div class="request-detail-item">
                                     <i class="fa fa-phone"></i>
-                                    <span>${request.phone}</span>
+                                    <span>${request.phone || 'N/A'}</span>
                                 </div>
                                 <div class="request-detail-item">
                                     <i class="fa fa-calendar"></i>
@@ -511,7 +500,7 @@
                             </div>
                             
                             <div class="reason-box">
-                                <strong>Reason for Access:</strong>
+                                <strong><i class="fa fa-comment"></i> Reason for Access:</strong>
                                 <p>${request.reason}</p>
                             </div>
                             
@@ -524,7 +513,15 @@
                                         <i class="fa fa-times"></i> Reject
                                     </button>
                                 </div>
-                            ` : ''}
+                            ` : request.status === 'approved' ? `
+                                <div style="margin-top: 1rem; padding: 0.8rem; background: #d4edda; border-radius: 6px; font-size: 0.9rem; color: #155724;">
+                                    <i class="fa fa-check-circle"></i> Approved by ${request.approvedBy || 'Admin'} ${request.approvedAt ? 'on ' + request.approvedAt.toDate().toLocaleDateString() : ''}
+                                </div>
+                            ` : `
+                                <div style="margin-top: 1rem; padding: 0.8rem; background: #f8d7da; border-radius: 6px; font-size: 0.9rem; color: #721c24;">
+                                    <i class="fa fa-times-circle"></i> Rejected by ${request.rejectedBy || 'Admin'} ${request.rejectedAt ? 'on ' + request.rejectedAt.toDate().toLocaleDateString() : ''}
+                                </div>
+                            `}
                         </div>
                     </div>
                 `;
@@ -539,17 +536,24 @@
         };
 
         window.approveRequest = async function(requestId, email, fullName) {
-            const password = prompt('Enter a temporary password for this admin (they can change it later):');
+            const password = prompt('Enter a temporary password for this admin:\n(Minimum 8 characters - they can change it later)');
             if (!password) return;
             
             if (password.length < 8) {
-                showAlert('Password must be at least 8 characters!', 'error');
+                showAlert('❌ Password must be at least 8 characters!', 'error');
                 return;
             }
 
+            // Disable buttons to prevent double-click
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.disabled = true);
+
             try {
+                console.log('Creating Firebase account for:', email);
+                
                 // Create Firebase Auth account
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await createUserWithEmailAndPassword(auth, email, password);
+                console.log('✅ Firebase account created');
                 
                 // Update request status in Firestore
                 await updateDoc(doc(db, 'admin_requests', requestId), {
@@ -558,30 +562,35 @@
                     approvedBy: auth.currentUser.email,
                     temporaryPassword: password
                 });
+                console.log('✅ Firestore updated');
 
                 // Send approval email via EmailJS
                 try {
+                    console.log('Sending approval email to:', email);
                     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVED_TEMPLATE, {
-                        to_name:    fullName,
-                        to_email:   email,
-                        password:   password,
-                        login_url:  window.location.origin + '/admin-firebase.html',
-                        from_name:  'Tech Law Club'
+                        to_name: fullName,
+                        to_email: email,
+                        password: password,
+                        login_url: window.location.origin + '/admin-firebase.html',
+                        site_name: 'Tech Law Club',
+                        contact_email: 'info@techlawclub.com'
                     });
+                    console.log('✅ Email sent successfully');
                     showAlert(`✅ Account created and approval email sent to ${email}!`, 'success');
                 } catch (emailError) {
-                    // Account was still created, just email failed
-                    console.error('Email error:', emailError);
-                    showAlert(`✅ Account created for ${email} but email failed. Send login details manually: Password: ${password}`, 'success');
+                    console.error('❌ Email error:', emailError);
+                    showAlert(`✅ Account created for ${email} but email failed to send. Please notify them manually.\nPassword: ${password}`, 'success');
                 }
 
                 fetchRequests();
                 
             } catch (error) {
-                console.error('Error approving request:', error);
-                let errorMessage = 'Failed to approve request.';
+                console.error('❌ Error approving request:', error);
+                let errorMessage = 'Failed to approve request: ' + error.message;
                 
                 if (error.code === 'auth/email-already-in-use') {
+                    console.log('Account already exists, updating status...');
+                    
                     await updateDoc(doc(db, 'admin_requests', requestId), {
                         status: 'approved',
                         approvedAt: Timestamp.now(),
@@ -591,61 +600,78 @@
                     // Send email even if account already existed
                     try {
                         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVED_TEMPLATE, {
-                            to_name:   fullName,
-                            to_email:  email,
-                            password:  'Use your existing password (or reset it)',
+                            to_name: fullName,
+                            to_email: email,
+                            password: 'Use your existing password (or reset it)',
                             login_url: window.location.origin + '/admin-firebase.html',
-                            from_name: 'Tech Law Club'
+                            site_name: 'Tech Law Club',
+                            contact_email: 'info@techlawclub.com'
                         });
+                        console.log('✅ Email sent to existing account');
                     } catch (emailError) {
-                        console.error('Email error:', emailError);
+                        console.error('❌ Email error:', emailError);
                     }
 
-                    showAlert('This email already has an account. Status updated and email sent.', 'success');
+                    showAlert('✅ This email already has an account. Status updated and notification sent.', 'success');
                     fetchRequests();
                     return;
                 }
                 
                 showAlert(errorMessage, 'error');
+            } finally {
+                // Re-enable buttons
+                buttons.forEach(btn => btn.disabled = false);
             }
         };
 
         window.rejectRequest = async function(requestId) {
-            if (!confirm('Are you sure you want to reject this request?')) return;
+            if (!confirm('Are you sure you want to reject this request?\n\nThe user will receive a rejection notification email.')) return;
 
             // Find the request details for the email
             const request = allRequests.find(r => r.id === requestId);
             
+            // Disable buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.disabled = true);
+            
             try {
+                console.log('Rejecting request:', requestId);
+                
                 await updateDoc(doc(db, 'admin_requests', requestId), {
                     status: 'rejected',
                     rejectedAt: Timestamp.now(),
                     rejectedBy: auth.currentUser.email
                 });
+                console.log('✅ Request rejected in Firestore');
 
                 // Send rejection email via EmailJS
                 if (request) {
                     try {
+                        console.log('Sending rejection email to:', request.email);
                         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_REJECTED_TEMPLATE, {
-                            to_name:   request.fullName,
-                            to_email:  request.email,
-                            from_name: 'Tech Law Club',
+                            to_name: request.fullName,
+                            to_email: request.email,
+                            site_name: 'Tech Law Club',
                             contact_email: 'info@techlawclub.com'
                         });
-                        showAlert('Request rejected and notification email sent.', 'success');
+                        console.log('✅ Rejection email sent');
+                        showAlert('✅ Request rejected and notification email sent.', 'success');
                     } catch (emailError) {
-                        console.error('Email error:', emailError);
-                        showAlert('Request rejected but email notification failed.', 'success');
+                        console.error('❌ Email error:', emailError);
+                        showAlert('✅ Request rejected but email notification failed. Please notify user manually.', 'success');
                     }
                 } else {
-                    showAlert('Request rejected successfully.', 'success');
+                    showAlert('✅ Request rejected successfully.', 'success');
                 }
 
                 fetchRequests();
                 
             } catch (error) {
-                console.error('Error rejecting request:', error);
-                showAlert('Failed to reject request', 'error');
+                console.error('❌ Error rejecting request:', error);
+                showAlert('❌ Failed to reject request: ' + error.message, 'error');
+            } finally {
+                // Re-enable buttons
+                buttons.forEach(btn => btn.disabled = false);
             }
         };
     </script>
