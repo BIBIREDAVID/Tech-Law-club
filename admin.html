@@ -262,6 +262,15 @@
             background: #5a6268;
         }
 
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #e0a800;
+        }
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -317,6 +326,12 @@
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
 
         .avatar-grid,
@@ -398,6 +413,127 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Admin Cards Styles */
+        .admins-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .admin-card.current-user {
+            border-left-color: var(--success);
+            background: #f8fff9;
+        }
+
+        .admin-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .admin-badge.current {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: start;
+            gap: 1.5rem;
+        }
+
+        .admin-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .admin-details {
+            flex: 1;
+        }
+
+        .admin-email {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            padding-right: 100px;
+        }
+
+        .admin-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .admin-meta-item i {
+            color: var(--primary-blue);
+        }
+
+        .admin-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-box p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -414,6 +550,30 @@
             .data-table th,
             .data-table td {
                 padding: 0.5rem;
+            }
+
+            .admin-info {
+                flex-direction: column;
+            }
+
+            .admin-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .admin-email {
+                padding-right: 0;
+                font-size: 1rem;
+            }
+
+            .admin-badge {
+                position: static;
+                display: inline-block;
+                margin-bottom: 1rem;
             }
         }
     </style>
@@ -492,6 +652,10 @@
                         <div class="stat-number" id="totalExecutives">0</div>
                         <div>Total Executives</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalAdmins">0</div>
+                        <div>Total Admins</div>
+                    </div>
                 </div>
             </div>
 
@@ -500,9 +664,10 @@
                 <button class="tab" data-tab="resources">Manage Resources</button>
                 <button class="tab" data-tab="executives">Manage Executives</button>
                 <button class="tab" data-tab="approvals">Approve Requests</button>
+                <button class="tab" data-tab="admins">Manage Admins</button>
             </div>
 
-            <!-- Blog Management -->
+            <!-- Blog Management Tab -->
             <div id="blogTab" class="tab-content active">
                 <div class="admin-section">
                     <div class="section-header">
@@ -601,7 +766,7 @@
                 </div>
             </div>
 
-            <!-- Resources Management -->
+            <!-- Resources Management Tab -->
             <div id="resourcesTab" class="tab-content">
                 <div class="admin-section">
                     <div class="section-header">
@@ -680,7 +845,7 @@
                 </div>
             </div>
 
-            <!-- Executives Management -->
+            <!-- Executives Management Tab -->
             <div id="executivesTab" class="tab-content">
                 <div class="admin-section">
                     <div class="section-header">
@@ -805,6 +970,51 @@
                     </div>
                 </div>
             </div>
+
+            <!-- MANAGE ADMINS TAB (NEW!) -->
+            <div id="adminsTab" class="tab-content">
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2><i class="fa fa-users"></i> Manage Admin Users</h2>
+                        <p style="color: #666; margin-top: 0.5rem;">View and manage admin access</p>
+                    </div>
+
+                    <div id="adminsAlert" class="alert"></div>
+
+                    <div class="warning-box">
+                        <h3><i class="fa fa-exclamation-triangle"></i> Important Notice</h3>
+                        <p>
+                            <strong>Revoking admin access will:</strong><br>
+                            • Mark them as "revoked" in the database<br>
+                            • Block them from accessing the admin panel<br>
+                            • You cannot revoke your own access<br>
+                            • To fully delete their Firebase Auth account, you'll need to set up Cloud Functions (optional)
+                        </p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Total Admins</h3>
+                            <div id="adminsCount" style="font-size: 2rem; font-weight: bold; color: var(--primary-blue);">0</div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Active</h3>
+                            <div id="activeAdminsCount" style="font-size: 2rem; font-weight: bold; color: var(--success);">0</div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <h3 style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Revoked</h3>
+                            <div id="revokedAdminsCount" style="font-size: 2rem; font-weight: bold; color: var(--danger);">0</div>
+                        </div>
+                    </div>
+
+                    <div class="admins-grid" id="adminsGrid">
+                        <div style="text-align: center; padding: 3rem; color: #999;">
+                            <i class="fa fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>Loading admin users...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -812,10 +1022,11 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where, Timestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-functions.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -834,11 +1045,15 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+        const functions = getFunctions(app);
 
         // Initialize Google Auth Provider
         const googleProvider = new GoogleAuthProvider();
 
         console.log('Firebase initialized successfully');
+
+        // Global current user
+        let currentAdminUser = null;
 
         // UI Elements
         const loginScreen = document.getElementById('loginScreen');
@@ -848,16 +1063,42 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const adminUsername = document.getElementById('adminUsername');
 
+        // Check if user's admin access is revoked
+        async function checkAdminAccess(userEmail) {
+            try {
+                const q = query(
+                    collection(db, 'admin_requests'),
+                    where('email', '==', userEmail),
+                    where('status', '==', 'approved')
+                );
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    await signOut(auth);
+                    alert('⛔ Your admin access has been revoked. Logging out...');
+                    window.location.href = 'index.html';
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Error checking admin access:', error);
+                return true; // Don't block on error
+            }
+        }
+
         // Check auth state
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
+                // Check if admin access is still approved
+                const hasAccess = await checkAdminAccess(user.email);
+                if (!hasAccess) return;
+                
+                currentAdminUser = user;
                 loginScreen.style.display = 'none';
                 adminDashboard.style.display = 'block';
                 adminUsername.textContent = user.email;
                 loadAllData();
             } else {
-                // User is signed out
                 loginScreen.style.display = 'flex';
                 adminDashboard.style.display = 'none';
             }
@@ -899,7 +1140,6 @@
             
             try {
                 const result = await signInWithPopup(auth, googleProvider);
-                // User is signed in
                 console.log('Google sign-in successful:', result.user.email);
                 showAlert('loginAlert', 'Signed in with Google successfully!', 'success');
             } catch (error) {
@@ -934,7 +1174,7 @@
         function showAlert(elementId, message, type) {
             const alert = document.getElementById(elementId);
             alert.className = `alert alert-${type} show`;
-            alert.textContent = message;
+            alert.innerHTML = message;
             setTimeout(() => alert.classList.remove('show'), 5000);
         }
 
@@ -1326,15 +1566,7 @@
             }
         };
 
-        // Load all data
-        function loadAllData() {
-            loadBlogs();
-            loadResources();
-            loadExecutives();
-            loadApprovalRequests();
-        }
-
-        // Approval Requests Management
+        // APPROVAL REQUESTS MANAGEMENT
         let allApprovalRequests = [];
         let currentRequestFilter = 'pending';
 
@@ -1461,10 +1693,6 @@
             }
 
             try {
-                // Import createUserWithEmailAndPassword
-                const { createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js");
-                const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
-                
                 // Create Firebase Auth account
                 await createUserWithEmailAndPassword(auth, email, password);
                 
@@ -1476,8 +1704,9 @@
                     temporaryPassword: password
                 });
                 
-                showAlert('approvalsAlert', `Account created! Email: ${email} | Password: ${password}`, 'success');
+                showAlert('approvalsAlert', `✅ Account created! Email: ${email} | Password: ${password}`, 'success');
                 loadApprovalRequests();
+                loadAdminUsers(); // Reload admins list
                 
             } catch (error) {
                 console.error('Error approving:', error);
@@ -1485,13 +1714,13 @@
                 
                 if (error.code === 'auth/email-already-in-use') {
                     errorMessage = 'Email already has an account. Updating status only.';
-                    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
                     await updateDoc(doc(db, 'admin_requests', requestId), {
                         status: 'approved',
                         approvedAt: Timestamp.now(),
                         approvedBy: auth.currentUser.email
                     });
                     loadApprovalRequests();
+                    loadAdminUsers();
                 }
                 
                 showAlert('approvalsAlert', errorMessage, 'danger');
@@ -1502,8 +1731,6 @@
             if (!confirm('Are you sure you want to reject this request?')) return;
             
             try {
-                const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js");
-                
                 await updateDoc(doc(db, 'admin_requests', requestId), {
                     status: 'rejected',
                     rejectedAt: Timestamp.now(),
@@ -1518,6 +1745,201 @@
                 showAlert('approvalsAlert', 'Failed to reject request', 'danger');
             }
         };
+
+        // ==============================================
+        // MANAGE ADMINS TAB FUNCTIONALITY (NEW!)
+        // ==============================================
+        
+        let allAdminUsers = [];
+
+        function getInitials(name) {
+            if (!name) return '?';
+            const parts = name.split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        async function loadAdminUsers() {
+            try {
+                // Fetch all approved admin requests (not revoked)
+                const q = query(
+                    collection(db, 'admin_requests'),
+                    where('status', '==', 'approved')
+                );
+                const querySnapshot = await getDocs(q);
+                
+                allAdminUsers = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    allAdminUsers.push({
+                        id: doc.id,
+                        email: data.email,
+                        fullName: data.fullName,
+                        approvedAt: data.approvedAt,
+                        approvedBy: data.approvedBy,
+                        ...data
+                    });
+                });
+                
+                console.log(`✅ Loaded ${allAdminUsers.length} admin users`);
+                updateAdminStats();
+                renderAdminUsers();
+            } catch (error) {
+                console.error('❌ Error fetching admin users:', error);
+                document.getElementById('adminsGrid').innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #dc3545;">
+                        <i class="fa fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Error loading admin users</p>
+                        <p style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateAdminStats() {
+            const totalActive = allAdminUsers.filter(a => a.status === 'approved').length;
+            const totalRevoked = allAdminUsers.filter(a => a.status === 'revoked').length;
+            
+            document.getElementById('adminsCount').textContent = allAdminUsers.length;
+            document.getElementById('activeAdminsCount').textContent = totalActive;
+            document.getElementById('revokedAdminsCount').textContent = totalRevoked;
+            document.getElementById('totalAdmins').textContent = allAdminUsers.length;
+        }
+
+        function renderAdminUsers() {
+            const grid = document.getElementById('adminsGrid');
+            
+            if (allAdminUsers.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #999;">
+                        <i class="fa fa-users" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        <p>No admin users found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = allAdminUsers.map(admin => {
+                const isCurrentUser = admin.email === currentAdminUser?.email;
+                const approvedDate = admin.approvedAt?.toDate ? 
+                    admin.approvedAt.toDate().toLocaleDateString() : 'N/A';
+                
+                return `
+                    <div class="admin-card ${isCurrentUser ? 'current-user' : ''}">
+                        ${isCurrentUser ? 
+                            '<span class="admin-badge current">You</span>' : 
+                            '<span class="admin-badge">Admin</span>'
+                        }
+                        
+                        <div class="admin-info">
+                            <div class="admin-avatar">${getInitials(admin.fullName)}</div>
+                            
+                            <div class="admin-details">
+                                <div class="admin-email">${admin.email}</div>
+                                
+                                <div class="admin-meta">
+                                    <div class="admin-meta-item">
+                                        <i class="fa fa-user"></i>
+                                        <span>${admin.fullName || 'N/A'}</span>
+                                    </div>
+                                    <div class="admin-meta-item">
+                                        <i class="fa fa-calendar"></i>
+                                        <span>Approved: ${approvedDate}</span>
+                                    </div>
+                                    ${admin.approvedBy ? `
+                                        <div class="admin-meta-item">
+                                            <i class="fa fa-user-check"></i>
+                                            <span>By: ${admin.approvedBy}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                
+                                ${!isCurrentUser ? `
+                                    <div class="admin-actions">
+                                        <button class="btn btn-danger" onclick="revokeAdminAccess('${admin.id}', '${admin.email}', '${admin.fullName}')">
+                                            <i class="fa fa-user-times"></i> Revoke Access
+                                        </button>
+                                    </div>
+                                ` : `
+                                    <div style="margin-top: 1rem; padding: 0.8rem; background: #d4edda; border-radius: 6px; font-size: 0.9rem; color: #155724;">
+                                        <i class="fa fa-shield"></i> This is your account. You cannot revoke your own access.
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.revokeAdminAccess = async function(requestId, email, fullName) {
+            const confirmation = prompt(
+                `⚠️ PERMANENT ACTION ⚠️\n\n` +
+                `You are about to REVOKE admin access for:\n` +
+                `${fullName} (${email})\n\n` +
+                `This will:\n` +
+                `• Mark them as "revoked" in the database\n` +
+                `• Block them from accessing the admin panel\n` +
+                `• To fully delete their account, see Firebase Console\n\n` +
+                `Type "REVOKE" to confirm:`
+            );
+
+            if (confirmation !== 'REVOKE') {
+                if (confirmation !== null) {
+                    showAlert('adminsAlert', '❌ Action cancelled. You must type "REVOKE" to confirm.', 'warning');
+                }
+                return;
+            }
+
+            // Disable buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            try {
+                console.log('Revoking access for:', email);
+
+                // Update status to revoked
+                await updateDoc(doc(db, 'admin_requests', requestId), {
+                    status: 'revoked',
+                    revokedAt: Timestamp.now(),
+                    revokedBy: currentAdminUser.email
+                });
+
+                console.log('✅ Access revoked in Firestore');
+
+                showAlert(
+                    'adminsAlert',
+                    `✅ Admin access revoked for ${email}.<br><br>` +
+                    `<strong>Note:</strong> Their Firebase Authentication account still exists. ` +
+                    `To fully delete it:<br>` +
+                    `1. Go to Firebase Console → Authentication<br>` +
+                    `2. Find ${email}<br>` +
+                    `3. Click menu (⋮) → Delete account<br><br>` +
+                    `Or set up Cloud Functions for automatic deletion.`,
+                    'success'
+                );
+
+                // Reload admins list
+                loadAdminUsers();
+
+            } catch (error) {
+                console.error('❌ Error revoking access:', error);
+                showAlert('adminsAlert', '❌ Failed to revoke access: ' + error.message, 'danger');
+            } finally {
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        };
+
+        // Load all data
+        function loadAllData() {
+            loadBlogs();
+            loadResources();
+            loadExecutives();
+            loadApprovalRequests();
+            loadAdminUsers(); // Load admin users too
+        }
     </script>
 </body>
 </html>
